@@ -1,0 +1,674 @@
+Instalar Node.Js en Debian 11
+
+Introducción
+NodeJs es un marco de JavaScript que permite a los usuarios desarrollar fácilmente aplicaciones de red independientes para programación genérica. NodeJs es gratuito para hacer que el desarrollo de aplicaciones web sea más fluido e integrado mediante el uso de JavaScript tanto en el front-end como en el back-end.
+
+Está disponible para todos los sistemas operativos; En este artículo, aprenderá a instalar NodeJs en su sistema Debian (sistema operativo Linux) para que pueda crear excelentes aplicaciones utilizando NodeJs.
+
+A continuación se muestran tres métodos para instalar NodeJs en Debian 11, puede seguir uno de los siguientes métodos que le resulten más fáciles para una instalación exitosa.
+
+
+Instale Nodejs desde el repositorio de Debian
+-------------------------------------
+
+En el momento de escribir este artículo, la versión 12.22.5 de Node.js está disponible en los repositorios predeterminados. Para obtener esta versión de NodeJs en su sistema Debian, siga los pasos que se mencionan a continuación:
+
+Paso 1: actualice los paquetes
+Primero actualice todos los paquetes previamente instalados en el sistema con el comando que se proporciona a continuación:
+
+	sudo apt update 
+
+
+Paso 2: Instale Nodejs y NPM
+"npm" es el administrador de paquetes de NodeJs, ejecute el siguiente comando para instalar NodeJs y npm en Debian 11:
+
+	sudo apt install nodejs npm 
+
+
+Paso 3: verifica la versión
+Para verificar la instalación exitosa de la versión de NodeJ, ejecute el siguiente comando para verificar el número de versión de los NodeJ recientemente instalados:
+
+	node -v 
+	v12.22.5
+
+
+
+Instalar NodeJs usando NodeSource PPA
+-------------------------------------
+Puede utilizar un archivo de paquete personal (PPA) proporcionado por NodeSource para trabajar con la última versión de NodeJs. Este es un repositorio alternativo que contiene 'Apt' y contiene las versiones actuales de los repositorios oficiales de Debian para NodeJs.
+
+Siga los pasos a continuación para una instalación exitosa de NodeJ usando PPA:
+
+Paso 1: Instale PPA
+Para instalar el paquete NodeJs usando "Apt", agregue el repositorio a la lista de paquetes usando la sintaxis que se proporciona a continuación:
+
+	curl -sL https://deb.nodesource.com/setup_[numero_versione] -o nodesource_setup.sh
+
+Puede reemplazar el "número de versión" con la versión que desea instalar, aquí estoy instalando la versión "16.x" con el comando que se proporciona a continuación:
+
+	curl -sL https://deb.nodesource.com/setup_16.x -o nodesource_setup.sh 
+
+Paso 2: configurar la instalación de NodeSource
+Ejecute lo siguiente para solicitar el script que acaba de descargar, se abrirá un archivo y después de inspeccionar el archivo presione Ctrl + X para salir del archivo y regresar a la terminal:
+
+	nano nodesource_setup.sh 
+
+Paso 3: ejecutar el script
+Después de configurar el script, ejecútelo usando el comando que se indica a continuación:
+
+	sudo bash nodesource_setup.sh 
+El PPA se agrega a su configuración y la caché del paquete local se actualiza instantáneamente.
+
+
+Paso 4: instale NodeJs
+Ahora, después de agregar PPA, instale NodeJs usando el comando que se menciona a continuación, no necesita instalar npm por separado aquí, ya que ya está incluido en el paquete:
+
+	sudo apt install nodejs 
+
+Paso 5: verifica la versión
+Ahora verifique la instalación verificando el número de versión de NodeJs:
+
+	node -v 
+
+También verifique la versión npm para verificar su instalación con NodeJs:
+
+	npm -v 
+
+Paso 6: instale "build-essential"
+Para que las herramientas necesarias funcionen con el paquete npm, ejecute el siguiente comando:
+
+	sudo apt install build-essential 
+
+
+
+
+Instale NodeJ usando NVM en Debian 11
+-------------------------------------
+
+Node Version Manager, abreviado como NVM, también se puede utilizar para instalar NodeJs en Debian. En lugar de ejecutarse en el sistema operativo, NVM opera en el directorio de inicio de su usuario al nivel de un directorio independiente. En otras palabras, sin afectar a todo el sistema, puede instalar numerosas versiones independientes de NodeJs. NVM
+
+Siga los pasos que se indican a continuación para instalar NodeJ usando NVM:
+
+Paso 1: descargue el script de instalación de NVM
+Primero, desde el enlace de GitHub descargue el script de instalación de nvm con el comando que se proporciona a continuación:
+
+	curl -sL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh -o install_nvm.sh 
+
+Paso 2: configurar el script
+Con el comando nano, solicite el script descargado mediante el comando que se indica a continuación:
+
+	nano install_nvm.sh 
+Después de verificar el archivo, si todo se ve bien, salga del editor presionando Ctrl + X.
+
+
+Paso 3: ejecutar el script
+
+Después de configurar el archivo, ejecute el script descargado:
+
+	bash install_nvm.sh 
+
+Paso 4: obtenga acceso a la funcionalidad NVM
+La ejecución del script NVM agregará una configuración adicional a " ~/.profile", lo que permitirá que el nuevo programa cierre la sesión o vuelva a iniciarla; recargar el archivo " ~/.profile" usando:
+
+	source ~/.profile 
+
+Paso 5: Instale NodeJ desde las versiones disponibles en NVM
+Primero, podemos verificar qué versiones de NodeJ están disponibles en NVM a través del comando que se proporciona a continuación:
+
+	nvm ls-remote 
+Ahora elija el número de versión que desea instalar de la lista, Sintaxis:
+
+	nvm install [version-number]
+
+Voy a instalar la versión 11.7.0, así que reemplace [número de versión] con v11.7.0:
+
+	nvm install v11.7.0 
+
+Generalmente, nvm usa la última versión, debe decirle a nvm que use la versión descargada con el comando que se indica a continuación:
+
+	nvm use 11.7.0 
+
+Paso 6: verifica la versión
+Puede verificar la versión de NodeJs instalada usando:
+
+	node -v 
+	v11.7.0
+
+Si tiene muchas versiones de nodos instaladas en su sistema, para verificar la versión instalada recientemente, ejecute el siguiente comando:
+
+	nvm ls 
+
+
+Establecer la versión predeterminada de NodeJ usando NVM	
+--------------------------------------------------------
+
+Si desea establecer cualquier versión como predeterminada, escriba la siguiente sintaxis: nvm alias default [número de versión]
+
+Cambio a la versión predeterminada v12.1.0, luego reemplazo [número de versión] con v12.1.0:
+
+	nvm alias default 12.1.0 
+
+Prueba NodeJs
+Podemos comprobar si nuestros NodeJs instalados están funcionando o no; cree un archivo JavaScript de muestra con el comando nano:
+
+	nano sample.js 
+
+El archivo se abrirá en el editor, ahora ingrese el contenido que se muestra a continuación en el archivo para imprimir "Hello World" en el terminal. Presione Ctrl + O para guardar el archivo y presione Ctrl + X para salir del archivo:
+
+		const http = require(‘http’);
+		const hostname = ‘localhost’;
+		const port = 3000;
+		 
+		const server = http.createServer((req, res) => {
+		  res.statusCode = 200;
+		  res.setHeader(‘Content-Type’, ‘text/plain’);
+		  res.end(‘Hello World\n’);
+		});
+		  server.listen(port, hostname, () => {
+		  console.log(‘Server running at http://${hostname}:${port}/’);
+		});
+
+Ahora, para iniciar la aplicación, ejecute el comando que se indica a continuación:
+
+	node sample.js 
+	Server running at http://localhost:3000
+
+
+Ejecute el comando que se indica a continuación para probar la aplicación en otro terminal:
+
+	curl http://localhost:3000 
+
+
+Desinstalar NodeJs de Debian 11 Bullseye
+----------------------------------------
+Desinstalar cualquier versión, ejecute el siguiente comando:Dependiendo de la versión a la que desee apuntar, puede eliminar NodeJs con apt o NVM, tendrá que lidiar con el programa apt de todo el sistema para desinstalar las versiones instaladas del repositorio de Debian o PPA.
+
+	sudo apt remove nodejs 
+
+Si desea desinstalar la versión de NodeJs instalada por NVM, primero verifique la versión actual de NodeJs instalada con el comando que se proporciona a continuación:
+
+	nvm current 
+
+Luego, ejecute la sintaxis que se proporciona a continuación para desinstalar cualquier versión específica de NodeJs instalada usando NVM en su sistema:
+
+	nvm uninstall [version-number]
+
+Estoy desinstalando la versión actual de NodeJs, así que primero necesito deshabilitar NVM:
+
+	nvm deactivate 
+
+
+Ahora ejecuta el comando:
+
+	nvm uninstall 12.1.0 
+
+
+Conclusión
+-----------
+NodeJs es un marco del lado del servidor para crear aplicaciones JavaScript. Se utiliza para la programación tanto de back-end como de front-end. En este artículo, discutimos su instalación en Debian 11 usando tres métodos usando el repositorio oficial de Debian, a través del repositorio PPA y también a través de NVM, y también discutimos su prueba y desinstalación del sistema.		
+
+
+Todo el proceso anterior nos permite tener una version de node estable pero se queda en la version 12, si quetremos utilizar por ejemplo la version 18, debemos utilizar el siguiente proceso.
+
+Referencia
+
+https://techviewleo.com/how-to-install-node-js-on-debian-linux/
+
+
+
+Install Node.js 18 LTS on Debian 11 / Debian 10
+We will now install the Node.js 18 LTS on Debian 11 / Debian 10. Update the APT index to refresh system packages.
+
+	sudo apt update -y
+
+With the APT package repository updated you can proceed to install Node.js 18 LTS on Debian 11 / Debian 10.
+
+Node.js 18 LTS can be Manually installed from repository or installed via NVM package manager on Debian 11 / Debian 10.
+
+
+Method 1 : Manual installation of Node.js 18 LTS on Debian 11 / Debian 10
+Carry the steps below to install Node.js 18 LTS on Debian 11 / Debian 10.
+
+Step 1 : Remove the old PPA.
+If you previously had earlier versions of Node.js PPA installed, remove them by this command.
+
+	sudo add-apt-repository -y -r ppa:chris-lea/node.js
+	sudo rm -f /etc/apt/sources.list.d/chris-lea-node_js-*.list
+	sudo rm -f /etc/apt/sources.list.d/chris-lea-node_js-*.list.save
+
+In my case i had used the Chris Lea’s Node.js PPA.
+
+Step 2 : Add the NodeSource package signing key
+Execute the commands below:
+
+
+	sudo apt install curl
+	
+	KEYRING=/usr/share/keyrings/nodesource.gpg
+	
+	curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | sudo tee "$KEYRING" >/dev/null
+
+# if using wget
+	sudo apt install wget
+	
+	wget --quiet -O - https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | sudo tee "$KEYRING" >/dev/null
+
+
+List the signing key as below.
+
+	$ gpg --no-default-keyring --keyring "$KEYRING" --list-keys
+
+
+		/usr/share/keyrings/nodesource.gpg
+		----------------------------------
+		pub   rsa4096 2014-06-13 [SC]
+		      9FD3B784BC1C6FC31A8A0A1C1655A0AB68576280 <- Our signing key has been added.
+		uid           [ unknown] NodeSource <gpg@nodesource.com>
+		sub   rsa4096 2014-06-13 [E]
+
+		
+
+		In my case:
+
+			gpg: directory '/home/klvst3r/.gnupg' created
+			gpg: /home/klvst3r/.gnupg/trustdb.gpg: trustdb created
+			/usr/share/keyrings/nodesource.gpg
+			----------------------------------
+			pub   rsa4096 2014-06-13 [SC]
+			      9FD3B784BC1C6FC31A8A0A1C1655A0AB68576280
+			uid           [ unknown] NodeSource <gpg@nodesource.com>
+			sub   rsa4096 2014-06-13 [E]
+
+
+
+Step 3 : Add nodesource repository.
+
+Run these commands to add Node.js 18 repository.
+
+	VERSION=node_18.x
+	KEYRING=/usr/share/keyrings/nodesource.gpg
+	DISTRO="$(lsb_release -s -c)"
+	echo "deb [signed-by=$KEYRING] https://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+	echo "deb-src [signed-by=$KEYRING] https://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
+
+
+Once the repository is added, update your system to refresh your repository.
+
+	sudo apt update && sudo apt upgrade 
+
+Step 4 : Install Node.js 18 on Debian 11 / Debian 10
+Finally , execute the command below to install Node.js in your Debian 11 / Debian 10 .
+
+	$ sudo apt install nodejs
+
+		Reading package lists... Done
+		Building dependency tree... Done
+		Reading state information... Done
+		The following package was automatically installed and is no longer required:
+		  linux-image-5.10.0-9-amd64
+		Use 'sudo apt autoremove' to remove it.
+		The following NEW packages will be installed:
+		  nodejs
+		0 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.
+		Need to get 27.7 MB of archives.
+		After this operation, 184 MB of additional disk space will be used.
+		Get:1 https://deb.nodesource.com/node_18.x bullseye/main amd64 nodejs amd64 18.0.0-deb-1nodesource1 [27.7 MB]
+		Fetched 27.7 MB in 0s (77.2 MB/s)
+		Selecting previously unselected package nodejs.
+		(Reading database ... 147968 files and directories currently installed.)
+		Preparing to unpack .../nodejs_18.0.0-deb-1nodesource1_amd64.deb ...
+		Unpacking nodejs (18.0.0-deb-1nodesource1) ...
+		Setting up nodejs (18.0.0-deb-1nodesource1) ...
+		Processing triggers for man-db (2.9.4-2) ...
+
+
+Step 5 : Confirm Version of Node.js installed
+To check the version installed, run the command:
+
+	$ node -v
+	v18.0.0
+
+
+Optionally install development tools to build native addons:
+
+	sudo apt install gcc g++ make
+NPM is usually installed during Node.js installation. Check the version installed with this command:
+
+	$ npm -v
+	8.6.0
+
+
+Method 2 : Install Node.js 18 on Debian 11 / Debian 10 using NVM package manager
+---------------------------------------------------------------------------------
+Alternatively, you can use the Node Version Manager (NVM) to install Node.js 18 on your Debian system. NVM is a bash script that alows you to choose your preffered Node.js version to install. The tool will list all the available Node.js versions for you, and all you have to do is choose your version to install it.
+
+Step 1 : Download the NVM script from Github
+Visit the official Github website to download the script and run it.	
+
+	https://github.com/nvm-sh/nvm
+
+
+sudo apt install wget -y
+
+	wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh|bash
+
+
+The command output:
+
+=> Downloading nvm as script to '/home/jil/.nvm'
+
+=> Appending nvm source string to /home/jil/.bashrc
+=> Appending bash_completion source string to /home/jil/.bashrc
+=> You currently have modules installed globally with `npm`. These will no
+=> longer be linked to the active version of Node when you install a new node
+=> with `nvm`; and they may (depending on how you construct your `$PATH`)
+=> override the binaries of modules installed with `nvm`:
+
+/usr/lib
+├── corepack@0.10.0
+=> If you wish to uninstall them at a later point (or re-install them under your
+=> `nvm` Nodes), you can remove them from the system Node as follows:
+
+     $ nvm use system
+     $ npm uninstall -g a_module
+
+=> Close and reopen your terminal to start using nvm or run the following to use it now:
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+The script clones the nvm repository to ~/.nvm and attempts to add the source lines to the correct profile file i.e ~/.bash_profile ~/.profile, or ~/.bashrc
+
+Step 2 : Export the NVM_DIR to your home directory
+This is achieved by executing the command below:
+
+	# Bash
+	$ source ~/.bashrc
+
+	# Zsh
+	$ source ~/.zshrc
+
+	# Confirm
+	$ echo $NVM_DIR
+	/home/jil/.nvm
+	Verify NVM version installed.
+
+	$ nvm -v
+	0.39.1
+Step 3 : List all Node.js versions available for installation
+To list the Node.js versions available for installation, run the command below.	
+
+$ nvm list-remote 
+        v16.14.2   (Latest LTS: Gallium)
+        v17.0.0
+        v17.0.1
+        v17.1.0
+        v17.2.0
+        v17.3.0
+        v17.3.1
+        v17.4.0
+        v17.5.0
+        v17.6.0
+        v17.7.0
+        v17.7.1
+        v17.7.2
+        v17.8.0
+        v17.9.0
+        v18.0.0
+A long list of all the available Node.js for installation will be populated.
+
+
+Step 4 : Install Node.js v18.x on Debian 11 / Debian 10
+To install version v18.x run the following command.
+
+	$ nvm install v18
+
+		Downloading and installing node v18.0.0...
+		Downloading https://nodejs.org/dist/v18.0.0/node-v18.0.0-linux-x64.tar.xz...
+		######################################################################### 100.0%
+		Computing checksum with sha256sum
+		Checksums matched!
+		Now using node v18.0.0 (npm v8.6.0)
+		Creating default alias: default -> v18 (-> v18.0.0)
+		Install Node.js 18 via NVM.
+
+	$ nvm install node
+		Downloading and installing node v18.0.0...
+		Downloading https://nodejs.org/dist/v18.0.0/node-v18.0.0-linux-x64.tar.xz...
+		############################################################################################################################################################################################### 100.0%
+		Computing checksum with sha256sum
+		Checksums matched!
+
+
+Now using node v18.0.0 (npm v8.6.0)
+
+Creating default alias: default -> node (-> v18.0.0)
+Step 4 : verify Node.js version installed.
+Execute the command:
+
+		$ node -v
+		v18.0.0
+
+To list Node.js versions installed in the system.
+
+	$ nvm ls 
+		->      v18.0.0
+		         system
+		default -> v18 (-> v18.0.0)
+		iojs -> N/A (default)
+		unstable -> N/A (default)
+		node -> stable (-> v18.0.0) (default)
+		stable -> 18.0 (-> v18.0.0) (default)
+		lts/* -> lts/gallium (-> N/A)
+		lts/argon -> v4.9.1 (-> N/A)
+		lts/boron -> v6.17.1 (-> N/A)
+		lts/carbon -> v8.17.0 (-> N/A)
+		lts/dubnium -> v10.24.1 (-> N/A)
+		lts/erbium -> v12.22.12 (-> N/A)
+		lts/fermium -> v14.19.1 (-> N/A)
+		lts/gallium -> v16.14.2 (-> N/A)
+
+
+Create a simple HelloWorld Application in Node.js
+For demonstration purposes, i will write a simple helloworld Javascript program. Use a text editor of your choice to prepare the script.
+
+	vim helloworld.js
+
+Paste the following code.
+
+		const http = require('http');
+
+		const hostname = '0.0.0.0';
+		const port = 3000;
+
+		const server = http.createServer((req, res) => {
+		  res.statusCode = 200;
+		  res.setHeader('Content-Type', 'text/plain');
+		  res.end('Hello World');
+		});
+
+		server.listen(port, hostname, () => {
+		  console.log(`Server running at http://${hostname}:${port}/`);
+		});
+
+
+Save an edit from your editor.
+
+
+Run the programming via node global command by doing the following:
+
+	node helloworld.js
+
+This gives the following output.
+
+Server running at http://127.0.0.1:3000/
+
+Visit your browser and on your URL, enter the address http://127.0.0.1:3000/ or http://serverip:3000/
+
+If your installation is properly done, you should see the following output on your web browser.
+
+	Hello world
+
+
+Hello world is displayed on your browser to confrim sucessful installation of Node.js 18 on Debian 11 / Debian 10.
+
+Configuring Node.js application to start on boot using PM2
+Configuring Node.js application to start on boot is made possible by the golbal Production Process Manager for Node.js applications aka PM2. PM2 is a daemon process manager that helps you manage and keep your application online 24/7.
+
+
+Install pm2 using NVM in the following way.
+-------------------------------------------
+	sudo npm install pm2@latest -g
+
+Start the pm2 application.
+
+Execute the command below:
+
+	$ pm2 startup
+
+		                        -------------
+
+		__/\\\\\\\\\\\\\____/\\\\____________/\\\\____/\\\\\\\\\_____
+		 _\/\\\/////////\\\_\/\\\\\\________/\\\\\\__/\\\///////\\\___
+		  _\/\\\_______\/\\\_\/\\\//\\\____/\\\//\\\_\///______\//\\\__
+		   _\/\\\\\\\\\\\\\/__\/\\\\///\\\/\\\/_\/\\\___________/\\\/___
+		    _\/\\\/////////____\/\\\__\///\\\/___\/\\\________/\\\//_____
+		     _\/\\\_____________\/\\\____\///_____\/\\\_____/\\\//________
+		      _\/\\\_____________\/\\\_____________\/\\\___/\\\/___________
+		       _\/\\\_____________\/\\\_____________\/\\\__/\\\\\\\\\\\\\\\_
+		        _\///______________\///______________\///__\///////////////__
+
+
+		                          Runtime Edition
+
+		        PM2 is a Production Process Manager for Node.js applications
+		                     with a built-in Load Balancer.
+
+                Start and Daemonize any application:
+                $ pm2 start app.js
+
+                Load Balance 4 instances of api.js:
+                $ pm2 start api.js -i 4
+
+                Monitor in production:
+                $ pm2 monitor
+
+                Make pm2 auto-boot at server restart:
+                $ pm2 startup
+
+
+To start an application, run the commands below:	
+
+
+	 $ pm2 start helloworld.js
+
+                        -------------
+
+__/\\\\\\\\\\\\\____/\\\\____________/\\\\____/\\\\\\\\\_____
+ _\/\\\/////////\\\_\/\\\\\\________/\\\\\\__/\\\///////\\\___
+  _\/\\\_______\/\\\_\/\\\//\\\____/\\\//\\\_\///______\//\\\__
+   _\/\\\\\\\\\\\\\/__\/\\\\///\\\/\\\/_\/\\\___________/\\\/___
+    _\/\\\/////////____\/\\\__\///\\\/___\/\\\________/\\\//_____
+     _\/\\\_____________\/\\\____\///_____\/\\\_____/\\\//________
+      _\/\\\_____________\/\\\_____________\/\\\___/\\\/___________
+       _\/\\\_____________\/\\\_____________\/\\\__/\\\\\\\\\\\\\\\_
+        _\///______________\///______________\///__\///////////////__
+
+
+                          Runtime Edition
+
+        PM2 is a Production Process Manager for Node.js applications
+                     with a built-in Load Balancer.
+
+                Start and Daemonize any application:
+                $ pm2 start app.js
+
+                Load Balance 4 instances of api.js:
+                $ pm2 start api.js -i 4
+
+                Monitor in production:
+                $ pm2 monitor
+
+                Make pm2 auto-boot at server restart:
+                $ pm2 startup
+
+                To go further checkout:
+                http://pm2.io/
+
+
+                        -------------
+
+[PM2] Spawning PM2 daemon with pm2_home=/home/jil/.pm2
+[PM2] PM2 Successfully daemonized
+[PM2] Starting /home/jil/helloworld.js in fork_mode (1 instance)
+[PM2] Done.
+┌────┬────────────────────┬──────────┬──────┬───────────┬──────────┬──────────┐
+│ id │ name               │ mode     │ ↺    │ status    │ cpu      │ memory   │
+├────┼────────────────────┼──────────┼──────┼───────────┼──────────┼──────────┤
+│ 0  │ helloworld         │ fork     │ 0    │ online    │ 0%       │ 27.4mb   │
+└────┴────────────────────┴──────────┴──────┴───────────┴──────────┴──────────┘
+jil@debian-11:~$ 
+PM2 cheat sheet;
+
+
+
+
+# Fork mode
+	pm2 start app.js --name my-api # Name process
+
+		# Cluster mode
+		pm2 start app.js -i 0        # Will start maximum processes with LB depending on available CPUs
+		pm2 start app.js -i max      # Same as above, but deprecated.
+		pm2 scale app +3             # Scales `app` up by 3 workers
+		pm2 scale app 2              # Scales `app` up or down to 2 workers total
+
+		# Listing
+
+		pm2 list               # Display all processes status
+		pm2 jlist              # Print process list in raw JSON
+		pm2 prettylist         # Print process list in beautified JSON
+
+		pm2 describe 0         # Display all informations about a specific process
+
+		pm2 monit              # Monitor all processes
+
+		# Logs
+
+		pm2 logs [--raw]       # Display all processes logs in streaming
+		pm2 flush              # Empty all log files
+		pm2 reloadLogs         # Reload all logs
+
+		# Actions
+
+		pm2 stop all           # Stop all processes
+		pm2 restart all        # Restart all processes
+
+		pm2 reload all         # Will 0s downtime reload (for NETWORKED apps)
+
+		pm2 stop 0             # Stop specific process id
+		pm2 restart 0          # Restart specific process id
+
+		pm2 delete 0           # Will remove process from pm2 list
+		pm2 delete all         # Will remove all processes from pm2 list
+
+		# Misc
+
+		pm2 reset <process>    # Reset meta data (restarted time...)
+		pm2 updatePM2          # Update in memory pm2
+		pm2 ping               # Ensure pm2 daemon has been launched
+		pm2 sendSignal SIGUSR2 my-app # Send system signal to script
+		pm2 start app.js --no-daemon
+		pm2 start app.js --no-vizion
+		pm2 start app.js --no-autorestart
+
+
+That concludes our guide today. I hope it was revelational. Enjoy using Node.js 18 on Debian 11 / Debian 10. Please fee free to leave a comment below. See other guides in our website that may be of benefit to you.
+
+
+Reference:
+	https://techviewleo.com/how-to-install-node-js-on-debian-linux/
+	
+
+

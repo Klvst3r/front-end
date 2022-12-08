@@ -1,0 +1,277 @@
+10 Cambiar la Version de Node
+
+Cuando estamos creando el lciente para consultar los libros de la BD desde la API de Laravel, nos genera el siguiente error.
+
+---------------
+
+
+El problema comentado anteriormente, es que la  API funciona sin problema en el puerto 8000 en la URL :
+    http://localhost:8000/api/books
+
+Pero al intentar listar los libros del lado del cliente genera un error interno 
+
+En la terminal genera el siguiente error:
+----
+error - TypeError: fetch failed
+    at Object.fetch (node:internal/deps/undici/undici:11118:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async getStaticProps (webpack-internal:///./pages/libros/index.js:13:17)
+    at async Object.renderToHTML (/var/www/html/dev/Books/front-end/node_modules/next/dist/server/render.js:384:20)
+    at async doRender (/var/www/html/dev/Books/front-end/node_modules/next/dist/server/base-server.js:708:34)
+    at async cacheEntry.responseCache.get.isManualRevalidate.isManualRevalidate (/var/www/html/dev/Books/front-end/node_modules/next/dist/server/base-server.js:813:28)
+    at async /var/www/html/dev/Books/front-end/node_modules/next/dist/server/response-cache/index.js:80:36 {
+  cause: Error: connect ECONNREFUSED ::1:8000
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1300:16) {
+    errno: -111,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '::1',
+    port: 8000
+  },
+  page: '/libros'
+}
+
+---
+Y en el Navegador. el siguiente error, ya no pude continuar con el ejercicio.
+ 
+Server Error
+TypeError: fetch failed
+This error happened while generating the page. Any console logs will be displayed in the terminal window.
+Source
+
+pages/libros/index.js (4:16) @ async getStaticProps
+
+  2 | export async function getStaticProps(){
+  3 | 
+> 4 | const res = await fetch('http://localhost:8000/api/books')
+    |            ^
+  5 | 
+  6 | const data = await res.json()
+
+
+---
+
+Preguntando recibimos una respuesta que dice:
+
+---
+
+Hola Klvst3r, este problema ocurre por la versión de node js
+Verifica en la terminal la versión de node ejecutando node -v
+
+Si es la versión 18 entonces es el problema, intenta cambiando a la versión 16 de node que es la que utilizo en el entrenamiento.
+
+Te recomiendo utilizar nvm para manejar las versiones de node 
+Para MAC https://github.com/nvm-sh/nvm
+
+Para WINDOWS https://github.com/coreybutler/nvm-windows
+
+
+
+--
+
+Asi que procedemos a hacer el cambio de version de Node de la siguiente manera:
+
+
+
+Install Node.js 16|14 and npm on Debian 11
+----------------------------------------------
+
+
+This tutorial will show you how to install Node.js 16 | 14 and npm on Debian 11. Node.js is a server-side JavaScript programming language based on Google’s V8 JavaScript engine. You can use Node.js to create server-side JavaScript applications. It has an I/O paradigm that is built on events and non-blocking operations, allowing you to create efficient applications. Through npm, Node.js is recognized for its huge modular ecosystem.
+
+Node.js Features
+
+Here are the features of Node.js:
+
+    It is more convenient to code in a single language.
+    Node.js has impressive data processing capabilities.
+    It allows for rapid deployment and the creation of microservices.
+    Scalability is a feature of Node.js.
+    Cross-platform interoperability is a feature of Node.js.
+    NPM capability is available in Node.js.
+
+Install Node.js 16|14 and npm on Debian 11
+
+There are two ways to install Node.js 16|14 and npm on Debian 11.
+
+    Install Node.js 16|14 and npm on Debian 11 from Nodesource repository.
+    Install Node.js 16|14 using NVM.
+
+Method 1: Install Node.js 16|14 and npm on Debian 11 from Nodesource Repository
+Install Node.js 16 on Debian 11
+
+Follow the steps below to install Noje.js 16.
+
+
+Step 1: Update APT index
+
+To update the contents database of your Debian Linux package repository, use the apt update command:
+
+sudo apt update
+
+Step 2: Install Node.js 16 on Debian 11
+
+Install Node.js 16 on Debian 11 once the system has been updated by first installing the necessary repository:
+
+curl -sL https://deb.nodesource.com/setup_16.x | sudo bash -
+
+After you’ve added the repository, you may start installing Node.js 16 on Debian 11:
+
+sudo apt -y install nodejs
+
+Check the Node.js version installed:
+
+$ node  -v
+v16.14.2
+
+Install Node.js 14 on on Debian 11
+
+Follow the steps below to install Noje.js 14.
+Step 1: Update System Repo
+
+Use the command below to run system update:
+
+
+sudo apt update
+
+Step 2: Install Node.js 14 on Debian 11 (Utilizado)
+
+=======================================
+Install Node.js 14 on Debian 11 once the system has been updated by first installing the necessary repository:
+
+curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -
+
+After you’ve added the repository, you may start installing Node.js 14 on Debian 11:
+
+sudo apt -y install nodejs
+
+Check the Node.js version installed:
+
+
+$ node  -v
+v14.19.1
+
+Method 2: install Node.js 16|14 Using NVM
+
+The steps below will show you how to install Node.js 16|14 using NVM.
+Step 1: Install NVM
+
+Run the following command to install NVM:
+
+$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 14926  100 14926    0     0   393k      0 --:--:-- --:--:-- --:--:--  393k
+=> Downloading nvm as script to '/home/debian/.nvm'
+
+=> nvm source string already in /home/debian/.bashrc
+=> bash_completion source string already in /home/debian/.bashrc
+=> Close and reopen your terminal to start using nvm or run the following to use it now:
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+Close and reopen your terminal to start using nvm or run the following to use it now.
+
+
+Step 2: Serch Available Node.js Version
+
+You have now installed nvm for the current user on your machine. Find out the version of Node.js is currently available and install it. To list versions, use the ls-remote option.
+
+nvm ls-remote 
+
+Output:
+
+....
+       v14.18.1   (LTS: Fermium)
+       v14.18.2   (LTS: Fermium)
+       v14.18.3   (LTS: Fermium)
+       v14.19.0   (LTS: Fermium)
+       v14.19.1   (Latest LTS: Fermium)
+.....
+       v16.10.0
+       v16.11.0
+       v16.11.1
+       v16.12.0
+       v16.13.0   (LTS: Gallium)
+       v16.13.1   (LTS: Gallium)
+       v16.13.2   (LTS: Gallium)
+       v16.14.0   (LTS: Gallium)
+       v16.14.1   (LTS: Gallium)
+       v16.14.2   (Latest LTS: Gallium)
+
+Step 3: Installing Node.js with NVM
+
+Use the following command to install Node.js 16 as per the output above:
+
+
+$ nvm install v16
+Downloading and installing node v16.14.2...
+Downloading https://nodejs.org/dist/v16.14.2/node-v16.14.2-linux-x64.tar.xz...
+############################################################################################################################################################# 100.0%
+Computing checksum with sha256sum
+Checksums matched!
+Now using node v16.14.2 (npm v8.5.0)
+Creating default alias: default -> v16.14.2
+
+Run the following command to install Node.js 14 as per the output above:
+
+$ nvm install v14
+Downloading and installing node v14.19.1...
+Downloading https://nodejs.org/dist/v14.19.1/node-v14.19.1-linux-x64.tar.xz...
+############################################################################################################################################################# 100.0%
+Computing checksum with sha256sum
+Checksums matched!
+Now using node v14.19.1 (npm v8.5.0)
+
+Check the default Node.js:
+
+$ nvm list 
+->     v14.19.1
+       v16.14.2
+default -> v14.19.1
+....
+
+Test Node.js on Debian 11
+
+We create a Node.js web server that answers with the message “Hello, World!“.
+
+mkdir ~/Nodeproject
+cd ~/Nodeprojects
+
+Create a new file named hello-world.js and fill it with the code below:
+
+const http = require('http');
+
+const hostname = '188.40.225.25';
+const port = 3000;
+
+const server = http.createServer((req, res) => {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain');
+  res.end('Hello, World!\n');
+});
+
+server.listen(port, hostname, () => {
+  console.log(`Server running at http://${hostname}:${port}/`);
+});
+
+Save the file and run the command below in your terminal:
+
+$ node hello-world.js
+Server running at http://127.0.0.1:3000/
+
+The string “Hello, World!” should appear when you open the link in your browser.
+
+
+Conclusion
+
+Finally, Debian 11 has Node.js 16|14 and npm installed. We hope you learned something new from this tutorial. Coding in Node.js is a lot of fun.
+
+
+Reference:
+
+https://techviewleo.com/install-nodejs-and-npm-on-debian-linux/
+
+

@@ -1,0 +1,153 @@
+
+
+Cuando vayamos a 
+
+	http://localhost:3000/libros/crear
+
+Vamos a querer que nos muestre un formulario para crear libros y no hay que preocuparse por que estamos comenzando con las URL luego vamos a crear links para ir navegando entre todas las paginas para qu el usuario no tenga que recordar ninguna url mas que la del dominio.
+
+Entonces, para utilizar rutas anidadas, como es el caso:
+
+
+
+
+pages
+	|
+	-/api
+	   |
+	   -_app.js
+	   - index.js
+	   - libros.js
+
+
+Simplemente crearmos un directorio llamado "libros" y dentro creamos un componente llamado "crear"
+
+
+pages
+	|
+	-/api
+	|
+	-_app.js
+	- index.js
+	- libros.js
+	-/libros
+		|	
+		- crear.js
+
+
+Dentro tenemos la carpeta libros, y dentro el archivo crear.
+
+si accesamos a :
+
+http://localhost:3000/libros/crear
+
+Retornara el siguiente error:
+
+	Server Error
+	Error: The default export is not a React Component in page: "/libros/crear"
+
+	This error happened while generating the page. Any console logs will be displayed in the terminal window.
+
+
+Resultado de que no tenemos un componente:
+
+Se cuenta con un templñate para crear rapidamente estos componentes, llamamos a la estructura siguiente:
+
+
+template rfc
+---
+
+	const   = () => {
+	    return (
+	        <div>
+	            
+	        </div>
+	    )
+	}
+	export default ;
+
+---
+
+
+vamos allamarlo "BookCreate" y asi de sencillo tenemos el esqueleto del componente 
+
+
+---
+
+const  BookCreate = () => {
+    return (
+        <div>
+            BookCreate
+        </div>
+    )
+}
+export default BookCreate;
+
+---
+
+
+Vamos hacer otros camnios 
+
+Cuando accedemos a :
+
+	http://localhost:3000/libros/
+
+Estamos accediendo al archivo "libros.js"	
+
+Pero si tenemos ocupadas estas rutas, asi que tenemos otyra opcion que es podemos mover el archivo livros d ela siguiente manera:
+
+
+pages
+	|
+	-/api
+	|
+	-_app.js
+	- index.js
+	-/libros
+		|	
+		- crear.js
+		- index.js
+
+
+	"- libros.js<se elimina>""
+
+
+ahora si accedemos a 
+
+	http://localhost:3000/libros/
+
+y http://localhost:3000/libros/crear
+
+Tendremos el mismo resultado 	
+
+Pero ahora tenbemos agrupadas las dos vistas del index y la de crear si accedemos directamente a una carpeta que contiene un archivo index es ese el que se va a mostrar por defecto 
+
+Ahora cuando vayamos a
+
+	http://localhost:3000/libros/1
+
+Con el Id de un libro queremos que nos muestre un libro especifico, por ello vamos a crear un archivo en.
+
+duplicando el componente create llamandolo de momento [bid].js
+
+Cambiando su contenido.
+
+---
+	const  BookCreate = () => {
+	    return (
+	        <div>
+	            <h1>
+	                Book 1
+	            </h1>
+	        </div>
+	    )
+	}
+	export default BookCreate;
+---
+
+Si accesamos a:
+
+	http://localhost:3000/libros/1	
+
+Vemos que funciona pero solo funcionara con el Id 1, ya que si queremos acceder al libro con el ID 2, y no queremos crear manualmente un componente por cada identificador del libro que tengamos lo que haremos en estos casos es utilizar rutas dinamicas.
+

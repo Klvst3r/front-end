@@ -1,0 +1,311 @@
+10. Pagina de Libros
+
+/libros/index.js
+
+La idea es crear un listado con los libros existentes en la BD con la API de Laravel
+
+Existen varias formas de conectarse a una API externa en Next.js 
+
+Una de ellas es excportando en la parte superior del index.js una funcion asincrona llamada getStaticProp, retornandou un objetoq que estaran disponibles con las propiedades que estaran disponibles en el componente, en este caaso la variable book de comoento sera un  array vacio, pero con esto ya podemos utilizarlas dentro del componente.
+
+
+export async function getStaticProps(){
+	return {
+	props: {
+		books: []
+	}
+	}
+}
+
+
+Podemos hacer una reestructuración de books, y ya los podriamos hacer de la siguiente manera:
+
+Mediante la impresion de un pre, y para imprimir expresiones de Js en React utilizamos las llaves simples.
+
+La idea es verlo en la pantalla
+---
+const BookList = ({ books }) => {
+    return (
+        <div>
+            <pre>{JSON.stringify(books)}</pre>
+            <h1>Libros</h1>
+            <ul>
+                <li>Libros 1 </li>
+            </ul>
+            <Link href="/libros/crear">Create Book</Link>
+        </div>
+    )
+}
+---
+
+
+
+Y si revisamos en el navegador podremos comprobar que funciona:
+
+	http://localhost:3000/libros
+
+	Resultado:
+
+		[]
+			Libros
+				Libros 1
+			
+			Create Book
+
+
+
+si agregamos en las propiedades del objeto, las tendremos disponible en el componente, esta funcion getStaticProps	es una funcion especial y se ejecuta al momento de hacer el VILT, de momento solo debemos saber que retorna las propiedades que estaran en el componente book list en este caso, y por le momento no queremos devolver un array asi nadamas, ya qyue la idea es consultar a la API antes.
+
+OPara ello vamos a utilizar la funcion de JS fetch, por defecto sera un get request a la utrl que se le pase y sera la siguiente 
+
+fetch('http://localhost:8000/api/books')
+
+En nuestro caso no tenemos encendido el servidor de la API.
+
+Asi que en terminal. entramos a la carpeta del back end para levantar el servidor de la API.
+
+	cd ..
+	cd back-end
+	php artisan serve
+
+	php artisan ser
+
+   INFO  Server running on [http://127.0.0.1:8000].  
+
+
+Ahora este an el puerto 8000 
+
+Ahora si vamos a esa URL
+	127.0.0.1:8000/api/books
+
+Arrojando la salida correcta del contenido de la Bd
+	[
+		{
+			"id": 1,
+			"title": "Libro 1",
+			"created_at": "2022-11-01T20:19:04.000000Z",
+			"updated_at": "2022-11-01T20:19:04.000000Z"
+		},
+		{
+			"id": 2,
+			"title": "Libro 2 - Updated",
+			"created_at": "2022-11-01T20:19:04.000000Z",
+			"updated_at": "2022-11-17T18:34:04.000000Z"
+		},
+		{
+			"id": 4,
+			"title": "Book 4",
+			"created_at": "2022-11-17T18:20:25.000000Z",
+			"updated_at": "2022-11-17T18:20:25.000000Z"
+		}
+	]
+
+
+Ahora tenemos la informacion de la BD
+
+Tenemos la API en el puerto 8000 y el cleinte en el puerto 3000.
+
+Ahora, como estamos utilizando una fucnion asincrona, el editor a fetch sera necesario utilizar el keywork await y la respuesta de esta peticion vamos a guardarla en una constnato, haciendo un console.log () para inspeccionarla-
+
+---
+	export async function getStaticProps(){
+	    const res = await (`http://localhost:8000/api/books`)
+	    console.log(res)
+
+	    return {
+	        props: {
+	            books: ["Klvst3r"]
+	        }
+	    }
+	}
+---
+
+console.log(res)
+
+Ahora si abrimos el cleinte:
+
+		http://localhost:3000/libros
+
+Y Abrimos la consola no veremos ninguna salida.
+
+Lo unico como mensaje sugerente es:
+	Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+
+Lo que sucede es que la funcion getStaticProps, se ejecuta del lado del servidor, y para poder ver este console log devemos ir a la terminal donde ejecutamos 
+	npm run dev
+
+
+En este caso en la terminal del editor buscando la siguiente linea:
+
+[Symbol(Response internals)]	: {
+	url: 'http://localhost:8000/api/books',
+	status: 200,
+	sTatusText: 'OK',
+	headers: Headers { [Symbol(map)]: [Object: null prototype]},
+
+
+}
+
+Recibimos un status ok, es decir que si pudimos acceder a la API, pero no vemos los datos por ningun lado, para obtner los datos, debemos llamar al metodo JSON. que tambien devuleve una promesa.
+
+Entonces vamos a crear una constante de la siguiente manera y hacemos un console.log()
+
+
+---/pages/libros/index.js
+
+import Link from 'next/link'
+
+export async function getStaticProps () {
+    const res = await fetch ('http://localhost:8000/api/books')
+
+    const data = await res.json()
+
+    console.log(data);
+
+    return {
+        props: {
+            books: ['Klvst3r']
+        }
+    }
+}
+const BookList = ( { books } ) => {
+    return (
+        <div>
+            <pre>{JSON.stringify(books)}</pre>
+            <h1>Libros</h1>
+            <ul>
+                <li>Libro 1</li>
+            </ul>
+            <Link href="/libros/crear">Create Book</Link>
+        </div>
+    );
+};
+
+export defau
+---
+
+Devilviendo en la Terminal de WebStorm:
+
+		klvst3r@klvst3r:/var/www/html/dev/Books/front-end$ npm run dev
+
+		> front-end@0.1.0 dev
+		> next dev
+
+		ready - started server on 0.0.0.0:3000, url: http://localhost:3000
+		event - compiled client and server successfully in 459 ms (161 modules)
+		wait  - compiling /libros (client and server)...
+		event - compiled client and server successfully in 328 ms (211 modules)
+		[
+		  {
+		    id: 1,
+		    title: 'Libro 1',
+		    created_at: '2022-11-01T20:19:04.000000Z',
+		    updated_at: '2022-11-01T20:19:04.000000Z'
+		  },
+		  {
+		    id: 2,
+		    title: 'Libro 2 - Updated',
+		    created_at: '2022-11-01T20:19:04.000000Z',
+		    updated_at: '2022-11-17T18:34:04.000000Z'
+		  },
+		  {
+		    id: 4,
+		    title: 'Book 4',
+		    created_at: '2022-11-17T18:20:25.000000Z',
+		    updated_at: '2022-11-17T18:20:25.000000Z'
+		  }
+		]
+
+
+
+ahora solo nos resta quitar el console.log de verificación y asignar los datos devueltos a la variable books:
+
+De esa forma estaran disponibles en componente y se imprimiran en el stringify, actualizamos en el navegador:
+
+---
+
+	const data = await res.json()
+
+    //console.log(data);
+
+    return {
+        props: {
+            //books: ['Klvst3r']
+            books: data
+        }
+    }
+}
+
+---
+
+Con la siguiente respuesta:
+
+[{"id":1,"title":"Libro 1","created_at":"2022-11-01T20:19:04.000000Z","updated_at":"2022-11-01T20:19:04.000000Z"},{"id":2,"title":"Libro 2 - Updated","created_at":"2022-11-01T20:19:04.000000Z","updated_at":"2022-11-17T18:34:04.000000Z"},{"id":4,"title":"Book 4","created_at":"2022-11-17T18:20:25.000000Z","updated_at":"2022-11-17T18:20:25.000000Z"}]
+Libros
+Libro 1
+Create Book
+
+
+Ya se ha hecho una conexion con la API, el siguiente paso sera desplegar los libros dentro del List item, para ello :
+
+
+---
+	<ul>
+            {books.map(book => (
+            <li>{book.title}</li>
+                ))}
+    </ul>
+---
+
+La respuesta en el navegador sera:
+
+Libros
+
+	- Libro 1
+	- Libro 2 - Updated
+	- Book 4
+
+Create Book
+
+
+Revisando se pueden ver los libros, revisando podremos percatarnos que el editor esta mostrando un error, que estamos olvidando la llave key y es que en React para poder llevar un control de los listados, es necesario pasarle una propiedad key con un valor unico, asi que pasamos lla llave key
+
+
+Podemos ejecutar JS mediante llaves, y para ello tambien se utiliza templatestrings, que son una espcia de commillas invertidas, seguidas del id de book.
+---
+const BookList = ( { books } ) => {
+    return (
+        <div>
+            <h1>Libros</h1>
+            <ul>
+                {books.map(book => (
+                    <li key = {`book-${+book.id}`}>{book.title}</li>
+                ))}
+            </ul>
+            <Link href="/libros/crear">Create Book</Link>
+        </div>
+    );
+};
+---
+
+al ejecutar en el navehador funciona :
+
+	http://localhost:3000/libros
+
+		Libros
+			- Libro 1
+			- Libro 2 - Updated
+			- Book 4
+		Create Book	
+
+Con ello ya tenemos una conexión con la API	de forma exitosa.
+
+Para corroborar podemos modificar un dato en la BD y se vera reflejado en el cliente de la API.
+
+Hacemos una modificacione a la Bd y nos arroja el siguiente resultado exitoso:
+
+	Libros
+		Libro 1
+		Libro 2 - Updated
+		Book 3
+	Create Book

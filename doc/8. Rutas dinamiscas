@@ -1,0 +1,61 @@
+8. Rutas dinamiscas
+
+En Next.js se dfinen de la siguiente forma.
+
+Editando [bid].js
+
+para convertirlo utilizando los scarebrakets [].js como nombre de archivo dentro va el nombre del archivo, por lo general se utiliza id, como en nuestro caso es un book vamos a llamarle "bid" haciendo referencia al book ID
+
+quedando como nombre definido
+	
+	[bid].js
+
+ahora si vamos a:
+
+http://localhost:3000/libros/2
+
+Vemos que funciona incluso si estamos en Libro 2
+
+si vamos a 3 funciona tambien, todos nos vdevuelven la ruta.
+
+Mas adelante se vera como accedera  este parametro, en este caso como acceder el numero 3 y no mostrar siempre el numero 1.
+
+continuando construimos los esqueletos.
+
+Cambiamos dentro de [dib].js
+
+
+---
+	const  BookDetail = () => {
+	    return (
+	        <div>
+	            <h1>
+	                Book 1
+	            </h1>
+	        </div>
+	    )
+	}
+	export default BookDetail;
+---
+
+Con eso tenemos por ahora
+
+ya con esto tenemos
+
+La pagina de libros
+
+	http://localhost:3000/libros/2 
+
+La pagina para crear un libro 
+	http://localhost:3000/libros/crear
+
+y la pagina para ver un libro
+	http://localhost:3000/libros/1
+
+
+Vamos a ahora a crear una pagina para editar un libro		
+
+Seria algo como
+		http://localhost:3000/libros/editar
+
+		

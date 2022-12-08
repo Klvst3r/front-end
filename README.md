@@ -3,6 +3,24 @@
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+
+## Prerrequisites
+
+I will use 
+
+Server side:
+	- Apache / 2.4.54 (Debian 11)
+	- PHP ver. 8.1.13
+	- MySQL/MariaDB 8.1.13
+	- Laravel 9 (API - Server side)
+
+Client Side:
+	- npm v16.18.1
+	- npm  v8.19.2
+	- Next.Js (Client - Client side)
+
+
+
 ## Getting Started
 
 First, run the development server:

@@ -1,0 +1,171 @@
+Front-End con Next-Js
+
+Lo que toca a la segunda parte es construir un cliente para consumir la API creada con Laravel.
+
+Un cliente en terminos de desarrollos de APIs.
+
+En palabras simples de desarrollador, un clinte de API es una aplicación que se conecta a la API para enviar y obtener datos, mayormente en formaro JSON
+
+
+
+API CLIENT
+
+Aplicación que se conecta a una API para enviar y obtener datos, mayormente en formaro JSON
+
+
+		----------->
+CLIENT 					API
+		<----------
+			JSON
+
+
+Postman que se utilizo en la primera parte, se puede considerar como un cliente API, solicitamos, creamos, editamos, y eliminamos libros.
+
+
+API CLIENT
+Postman
+
+Es decir solictamos y enviamos datos, pero no podemos decirle a una persona no tecnica que utilice postman para consumir nuestra API de libros, probablemente sea una pesadilla ya que para escribir y obtener os libros tendria que memorizar una URL y entender el resultado en formto JSON, luego para obtener un libro especifico tendria que memorizar otra URL del ID del libro y ni se diga para crear, editar y eliminar.
+
+Entonces si creamos un cliente web donde se pueda navegar a traves de link para encontrar los libros, con formularios para crear y editar con botones para eliminar sin tener que memorizar todas esas URLs es mas probable que un usuario no tecnico la pueda utilizar.
+
+Esa es una de las principales razones por las que crear un cliente que consuma la API, es una buena idea.
+
+Vamos a desarrollar el cliente con NEXT.JS.
+
+URL
+	nextjs.org
+
+
+No hay que preocuparse ahora si no sabemos Netx.Js. ni React
+
+Node.JS
+Lo que debemos tener instalado antes de comenzar es Node.Js que es probable que ya se tenga instalado.
+
+Para poder instalarlo en caso de que no se cuente con ello se puede obtener desde:
+
+URL
+	node.js
+
+
+Para saber si ya esta instalado tanto node como npm ejecutamos
+
+	node -v
+
+		v18.12.1
+
+
+y para npm
+
+	npm -v
+
+		8.19.2
+
+Con esto ya tenemos para comenzar
+
+Ahora vamos a la carpeta donde alojaremos nuestra aplicación, y dentro de la carpeta contenedora:
+
+En nuestro caso lo haremos en:
+
+	/var/www/html/dev/Books
+
+
+ Que es donde se encuentra la API de Laravel ahi es donde se creara la aplicación con Next.Js, para ello utilizamos:
+
+ 	npx
+
+Este comendo ya se tiene disponible gracias a la instalación con Node, y ejecutamos el siguiente comando para ejecutar la ultima versión.
+
+	npx create-next-app@latest 	
+
+Es posible que pregunte si si desea instalar el instalador  pulsamos Y para que se instale, se ejecuta nuevamente para que instale el nombre de la aplicación;:
+
+Volvemos a ejecutar
+
+	npx create-next-app@latest
+
+
+En nuestro caso especifico, al utilizar el parametro "latest" nos genera el siguiente error:
+
+	npx create-next-app@latest
+		npm ERR! code ENETUNREACH
+		npm ERR! syscall connect
+		npm ERR! errno ENETUNREACH
+		npm ERR! request to https://registry.npmjs.org/create-next-app failed, reason: connect ENETUNREACH 2606:4700::6810:1223:443
+
+		npm ERR! A complete log of this run can be found in:
+		npm ERR!     /home/klvst3r/.npm/_logs/2022-12-01T17_41_08_900Z-debug-0.log
+
+
+Para evitar complicaciones con ello reemplazamos lo anterior con el siguiente comando:
+		npx create-next-appnpx create-next-app
+			
+
+			Need to install the following packages:
+			  create-next-app@13.0.5
+			Ok to proceed? (y) y
+			? What is your project named? › my-app
+
+
+
+
+En la segunda vuelta preguntara el nombre de la aplicación
+
+
+Esto agragara los paquetes necesarios e inicializara el proyecto e instalara los componentes necesarios para trabajar.
+
+Name: front-end
+
+Esto instalara
+- react
+- react-dom
+-next 
+
+Para nuestro caso especifico si instala lo siguiente.
+
+
+------
+
+Ok to proceed? (y) y
+✔ What is your project named? … front-end
+✔ Would you like to use TypeScript with this project? … No / Yes
+✔ Would you like to use ESLint with this project? … No / Yes
+Creating a new Next.js app in /var/www/html/dev/Books/front-end.
+
+Using npm.
+
+Installing dependencies:
+- react
+- react-dom
+- next
+- typescript
+- @types/react
+- @types/node
+- @types/react-dom
+- eslint
+- eslint-config-next
+
+
+-----
+
+Creando una carpeta con la que se haya nombrado el proyecto.
+
+Podemos observar que se creara un repositorio de git listo para utilizarse.
+
+Con el comando
+	git status 
+
+podemos ver	el estado del repositorio.
+
+En este caso vamos a utilizar webstrom como editor de codigo, aunque podemos sentirnos libres de utilizar el que mejor nos acomode.
+
+En este caso vamos a utilizar una version de rueba y nos permite utilizarlo por 30 dias.
+
+Posterior a ello abrirmos la carpeta contenedora de nuestro proyecto
+
+	front-end
+
+abrirmos el archivo README.md 			
+
+
+

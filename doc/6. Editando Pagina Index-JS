@@ -1,0 +1,102 @@
+Editando Pagina Index
+
+Esta cabecera servira para las demas vistas
+
+Agregamos el contenido siguiente.
+
+
+si vamos a la pagina
+
+http://localhost:3000/libros
+
+para ver el listado de libros.status
+
+de momento tenemos un 404 indicando que la página no existe.status
+Para crear un pagian en Next.js es tan sencillo como crear un componente de Javascrip dentro de la carpeta pages
+
+Creamos un nuevo archivo
+
+
+libros.js                   
+
+
+pages
+	|
+	-/api
+	   |
+	   -_app.js
+	   - index.js
+	   - libros.js
+
+con esto cuando vayamos a la raiz se va a ejecutar el archivo index y cuando vayamos a carpeta
+http://localhost:3000/libros
+
+Se va a ejecutar el archivo libros.
+
+Ahora nos aparece un error.
+---
+	Server Error
+	Error: The default export is not a React Component in page: "/libros"
+
+	This error happened while generating the page. Any console logs will be displayed in the terminal window.
+---
+
+
+Indicando el default export  no es un componente de React .container
+
+Lo que debemos hacer en este archivo es exportar un componente de React que podemos hacer con
+
+	export default function () {
+		return <h1> Libros</h1>
+	}
+
+El editor Webstorm esta dando unas advertencias ya se solucionara.js
+
+Lo que se debe hacer en los demas componentes:
+
+Es que se va a encerar el HTMl dentro para poder agregarlos en la siguiente linea 
+
+
+export default function () {
+    return (
+        <div>
+            <h1> Libros</h1>
+        </div>
+    )
+}
+
+Lo importante es que debemos retornan solo un elemento 	de esta forma para poder agregar mas elementos en caso de ser necesario  
+
+
+export default function () {
+    return (
+        <div>
+            <h1> Libros</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem esse eum, facilis fugit harum iure iusto molestiae nobis nulla optio pariatur provident quasi quo sapiente sed suscipit, ut. Cum, dolor.</p>
+        </div>
+    )
+}
+
+
+No podemos retornar mas de un elemento.
+
+Para solucionar la advertencia que en realidad es Slin
+
+Vamos darle un nombre al export creando una constante llamarle BookList que sera igual a aun => function 
+
+retornando todo de la siguiente manera:
+
+const BookList = () => {
+    return (
+        <div>
+            <h1> Libros</h1>
+        </div>
+    )
+}
+export default BookList
+
+
+De esta manera el Export tiene nombre
+
+Esta es la estructura basica del componente, todas las vistas que se creen van a tener esta estructura
+
