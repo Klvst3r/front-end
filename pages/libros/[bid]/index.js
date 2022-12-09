@@ -1,8 +1,26 @@
-import Head from "next/head";
+import Link from "next/link";
+export async function getStaticProps () {
+    const res = await fetch ('http://localhost:8000/api/books/1')
+    const data = await res.json()
+    return {
+        props: {
+            book: data
+        }
+    }
+}
+export async function getStaticPaths(){
+    const res = await fetch('http://localhost:8000/api/books')
 
-const BookDetail = () => {
+    const data = await res.json()
+
+     
+}
+const BookDetail = ({ book }) => {
     return (
-        <h1>BookEdit</h1>
+        <>
+            <h1>{book.title}</h1>
+            <Link href="/libros">Book List</Link>
+        </>
     );
 };
 

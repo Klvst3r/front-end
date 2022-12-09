@@ -1,0 +1,73 @@
+11. Empleo de URL para navegación en el cliente de Next.Js con los datos de la BD
+
+El siguiente paso sera que al hacer click en nos lleve a libros y el Id del libro que se quiere ver.
+
+Para ello en el BookDetail
+
+---
+import Link from "next/link";
+export async function getStaticProps () {
+    const res = await fetch ('http://localhost:8000/api/books/1')
+    const data = await res.json()
+    return {
+        props: {
+            book: data
+        }
+    }
+}
+const BookDetail = ({ book }) => {
+    return (
+        <>
+            <h1>{book.title}</h1>
+            <Link href="/libros">Book List</Link>
+        </>
+    );
+};
+
+export default BookDetail
+---
+
+
+Pero al ejecutar nos envia el siguiente error:
+
+	Server Error
+	Error: getStaticPaths is required for dynamic SSG pages and is missing for '/libros/[bid]'.
+	Read more: https://nextjs.org/docs/messages/invalid-getstaticpaths-value
+
+	This error happened while generating the page. Any console logs will be displayed in the terminal window.
+
+
+Nos indica que la funcion getStaticPath es obligatoria, asi que vamos a crearla.
+
+
+---
+	export async function getStaticPath(){
+	    const res = await fetch('http://localhost:8000/api/books')
+
+	    const data = await res.json()
+	}
+
+---
+
+En este caso vamos a visitar la URl que contiene todos los libros, ya que lo que queremos es indicarle a Next.Js donde puede encontrar todos los identificadores de los libros, para poder generar las paginas estaticas.
+
+Entonces, la funcion getstaticPath debe retornar un objeto con la llave path que es igual un array, y dentro del array va a tner varios objetos y cada objeto va a representar un libro y va a tener esta forma:
+
+---
+export async function getStaticPath(){
+    const res = await fetch('http://localhost:8000/api/books')
+
+    const data = await res.json()
+
+    return {
+        paths: [{params:{bid: 1}},{params:{bid: 2}},{params:{bid: 3}}]
+    }
+}
+---
+
+Param = a un objeto y este objeto va a tener el Id del libro, llamado bid, seguido del ID. Entonces tendriamos el parametro con el Id 2, el 3 y asi sucecivamente.
+
+Esta es la respuesta que requiere Next.Js para generar estaticamente todas estas páginas. Pero oviemente nosotros no queremos hacerlo manualmente, por que no queremos modificar este codigo cada vez que agreguemos un libro queremos que sea dinamicamente.
+
+Entonces vamos a borrar todo lo que tiene este array.
+
