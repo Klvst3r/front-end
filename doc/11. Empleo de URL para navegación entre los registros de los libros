@@ -299,3 +299,8 @@ probamos todos los enlaces desde el Listados de libros y verificamso que corren 
 
 
 
+Para simplificar esto un poco podemos hacer una destructuración.
+
+quedando el codigo de la siguiente manera:
+
+
