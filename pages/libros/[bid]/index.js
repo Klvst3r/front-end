@@ -1,6 +1,7 @@
 import Link from "next/link";
-export async function getStaticProps () {
-    const res = await fetch ('http://localhost:8000/api/books/1')
+export async function getStaticProps (context) {
+    console.log(context.params.bid)
+    const res = await fetch (`http://localhost:8000/api/books/${context.params.bid}`)
     const data = await res.json()
     return {
         props: {
@@ -14,13 +15,13 @@ export async function getStaticPaths(){
     const data = await res.json()
 
     return {
-        paths: data.map(book =>{
-            return {params: { bid: String(book.id)}}
-            }),
+        paths: data.map(book =>({
+            params: { bid: String(book.id)}
+            })),
         fallback: false
     }
 
-     
+
 }
 const BookDetail = ({ book }) => {
     return (

@@ -71,3 +71,231 @@ Esta es la respuesta que requiere Next.Js para generar estaticamente todas estas
 
 Entonces vamos a borrar todo lo que tiene este array.
 
+ ---
+
+    const res = await fetch('http://localhost:8000/api/books') //aqui ya se tienen todos los libros
+
+    const data = await res.json()
+
+    return {
+        paths: []
+        })
+    }
+}
+ ---
+
+ Ahora se tiene que moldear la inforamción para que tenga la estructura que acabamos de revisar, entonces a traves de data que es donde estan los libros, podemos hacer un mapeo y por cada libro podemos retornar un objeto, que diga:
+
+
+ ---
+export async function getStaticPaths(){
+    const res = await fetch('http://localhost:8000/api/books') //aqui ya se tienen todos los libros
+
+    const data = await res.json()
+
+    return {
+        paths: data.map(book  => {
+            return {params: {bid: book.id }}
+        })
+    }
+} 
+
+
+
+
+
+al ir al navegador nos genera un error:
+
+
+	Server Error
+
+		Error: The 'Fallback' key must be returned from getstaticPaths in /libros/[bid].
+		
+		Expected: { paths [], fallback: boolean }
+
+		See mhere for more info:
+
+		https://nextjs.org/docs/messages/invalid-getstaticpaths-value
+
+			This error happened while generating the page. Any console logs will be displayed in the terminal window.
+
+
+Esta indicando que la llave Fallback debe ser retornada por aqui tambien, asi que debajo de los paths vamos agregar fallbak = false , es decir si tratamos d eacceder a una URL con un Id que no existe, nos va a mostrar la página de error 404.
+
+Existen otras opciones, pero de momento es la que vamos a utilizar.
+
+Actualizamos y tenemos otro error:
+
+
+	Server Error
+        Error: A required parameter (bid) was not provided as a string in getStaticPaths for /libros/[bid]
+
+            This error happened while generating the page. Any console logs will be displayed in the terminal window.
+
+Nos idica que el parametro bid no fue proveido como un string es decir la pasamos un entero por aqui, asi que lo vamos a cambia a strings, simplemente:
+ encerrandolo en String().
+
+ ---
+ return {
+        paths: data.map(book => {
+            return {params: {bid: String(book.id)}}
+        }),
+        fallback: false
+    }
+
+ ---
+
+Ya esta funcionando correctamente
+	URL
+		http://localhost:3000/libros/1
+
+		Resultado:
+			
+            http://localhost:3000/libros/1
+
+                Libro 1
+                    Book List
+
+Como solo se esta utilizando Arrow function y se esta retornando un solo elemento se puede simplificar de la siguiente manera:
+
+
+Antes:
+---
+
+    return {
+        paths: data.map(book =>{
+            return {params: { bid: String(book.id)}}
+            }),
+        fallback: false
+    }
+
+---
+
+
+
+mismo codigo simplificado (Despues):
+---
+    return {
+        paths: data.map(book =>({
+            params: { bid: String(book.id) }
+            })),
+        fallback: false
+    }
+---
+
+Es mejor en opinion general y funciona de la misma forma.
+
+
+Ya estamos haciendo mapeo de los books, por cada libro retornamos el objeto params con el identificador del libro.
+
+ahora ya podemos ver el libro 1, si hacemos click a otro  seguimos viendo el lirbo 1, esto es por que en la URL siempre se esta mostrando el 1, entonces para obtener el parametro:
+
+Se recibe el contexto de la petición. 
+
+Quedando de la siguiente manera:
+
+---
+export async function getStaticProps (context) {
+    console.log(context)
+    const res = await fetch ('http://localhost:8000/api/books/1')
+    const data = await res.json()
+    return {
+        props: {
+            book: data
+        }
+    }
+}
+export async function getStaticPaths(){
+    const res = await fetch('http://localhost:8000/api/books')
+
+    const data = await res.json()
+
+    return {
+        paths: data.map(book =>({
+            params: { bid: String(book.id)}
+            })),
+        fallback: false
+    }
+
+
+}
+---
+
+Abrimos la terminal de websotorm y podremos ver el parametro bid con el valor obtenido 
+
+http://localhost:3000/libros/1
+    Terminal : Webstorm
+
+Para el caso 1:
+
+wait  - compiling...
+event - compiled client and server successfully in 97 ms (211 modules)
+{
+  params: { bid: '1' },
+  locales: undefined,
+  locale: undefined,
+  defaultLocale: undefined
+}
+
+
+Para un segundo ejemplo de la opcion 2
+
+
+wait  - compiling /libros...
+event - compiled client and server successfully in 158 ms (214 modules)
+{
+  params: { bid: '2' },
+  locales: undefined,
+  locale: undefined,
+  defaultLocale: undefined
+}
+
+
+Entonces ya con el parametro  
+    params: { bid: '2'}
+
+
+Ahora  para acceder a este identificador accedems a 
+
+---
+export async function getStaticProps (context) {
+    console.log(context.params.bid)
+---
+
+Y en consola de Webstorm podemos ver ahora solo el identificador
+
+
+
+Probamos ahora con otro id del listado de libros desde el navehador para veiricar este parametro.
+
+
+wait  - compiling /libros...
+event - compiled client and server successfully in 102 ms (214 modules)
+4
+
+
+Vemos que se imprime el correcto..
+
+Para cceder a este identificador.
+
+Ahora solo queda reemplazar el 1, cambiando a templateStrings. 
+
+quedando de la siguiente manera con el parametro del identificador incluido.
+
+---
+export async function getStaticProps (context) {
+    console.log(context.params.bid)
+    const res = await fetch (`http://localhost:8000/api/books/${context.params.bid}`)
+    const data = await res.json()
+    return {
+        props: {
+            book: data
+        }
+    }
+}
+---
+
+probamos todos los enlaces desde el Listados de libros y verificamso que corren sin probelma alguno.
+
+
+
