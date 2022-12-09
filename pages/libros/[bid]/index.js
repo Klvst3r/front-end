@@ -13,6 +13,13 @@ export async function getStaticPaths(){
 
     const data = await res.json()
 
+    return {
+        paths: data.map(book =>{
+            return {params: { bid: String(book.id)}}
+            }),
+        fallback: false
+    }
+
      
 }
 const BookDetail = ({ book }) => {
