@@ -1,0 +1,97 @@
+12. Componente Book Create
+
+
+libros/create.js
+
+Se creara un formulario sin accion , con un imput de tipo teto y un boton para enviar el formulario.
+
+---
+<h1>BookCreate</h1>
+
+            <form action="">
+                <input type="text"/>
+                <button>Enviar</button>
+            </form>
+            <br/>
+---
+
+En el navegador se puede ver sin problema alguno.
+
+Se nota que al momento de enviar se refresca la pagina, y podemos observar que al final de la url se agrega un ? question_mark para enviarlos a traves de la URL.
+
+Y esto no es lo que se quiere.
+
+Lo que se va a hacer es escuchar el evento submit, cuando este evento ocurra vamos allamar a un metodo andle submit, que se va a crear.
+
+---
+
+
+    function handleSubmit(e){
+        e.preventDefault()
+    }
+
+    return (
+        <>
+        <h1>BookCreate</h1>
+
+            <form onSubmit={handleSubmit}>
+
+---            
+
+Asi ahora cuando se pulse el boton de enviar se va a llamar a un metodo llamado handlesubmit, se va a crear con la funcion y se recibe un evento. Es decir el evento submit del formulario.
+
+Lo primero que hay que hacer es prevenir el comportamiento por defecto, que es enviar los datos, y refrescar la pagina. asi al darle click ya no se refrescara la pagina.
+
+ahora ya se podra agragar la logica para cuando se pulse el boton de enviar.
+
+   function handleSubmit(e){
+        e.preventDefault()
+        console.log('submitting')
+    }
+
+En el navegador, se verifica la salida  
+
+
+el siguiente paso es que lo que se tenga escrito en el cuadro de texto, se mande a la consola para ir revisando. para ello se va a utilizar una pieza de estado en React usando
+useState
+
+Y se importa
+
+import {useState} from "react";
+
+y este hook como se le llama nos devuelve un array con dos variables.
+
+---
+import {useState} from "react";
+
+    const [bookName, setBookName] = useState('Klvst3r')
+    function handleSubmit(e){
+        e.preventDefault()
+        console.log(bookName)
+    }
+---
+
+Entonces el estado esta vacio y lo que queremos cuando el imput text reciba un valor o un cambio, en ese momento llmar a la funcion setBookName para setear el valor de la variable bookName, y cuando le pulsemos enviar veamos el valor en consola con ese valor .
+
+ahora se va a escuchar el metodo, conchange vmos allamar a una fucntion anonima
+un => 
+que a su vez va llamar a la funcion setBookName, y ahora como parametro  debemos pasarle lo que sea que escribio el usuario, para ello se accesa al evento recibido, y a traves de el llamar al target o al objetivo y su valor.
+
+De esa forma se obetiene salida en consola del dato enviado desde el formulario.
+
+
+
+---
+<p>{bookName}</p> //Si se utiliza esta linea podemos verlo miesntra se escribe el valor
+
+<form onSubmit={handleSubmit}>
+                <input
+                    onChange={(e) => setBookName(e.target.value)}
+                    type="text"
+                />
+                <button>Enviar</button>
+            </form>
+---
+
+ahora se puede ver en consola el valor 
+
