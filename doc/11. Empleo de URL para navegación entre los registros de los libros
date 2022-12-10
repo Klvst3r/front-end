@@ -303,4 +303,90 @@ Para simplificar esto un poco podemos hacer una destructuración.
 
 quedando el codigo de la siguiente manera:
 
+---
+export async function getStaticProps ({ params }) {
+    //console.log(params.bid)
+    const res = await fetch (`http://localhost:8000/api/books/${params.bid}`)
+    const data = await res.json()
+    return {
+        props: {
+            book: data
+        }
+    }
+}
+export async function getStaticPaths(){
+    const res = await fetch('http://localhost:8000/api/books')
 
+    const data = await res.json()
+
+    return {
+        paths: data.map(book =>({
+            params: { bid: String(book.id)}
+            })),
+        fallback: false
+    }
+}
+const BookDetail = ({ book }) => {
+    return (
+        <>
+            <h1>{book.title}</h1>
+            <Link href="/libros">Book List</Link>
+        </>
+    );
+};
+
+---
+
+Ahora ya tenemos las dos vistas, la que muestra el listados de libros, la que muestra un libro especifico, y antes de implementar la creación de un libro, la URL esta bien en local, pero cuando se este en producción vamos a necesitar cambiarla y no se quiere cambiar en todas las partes, donde se utilice, asi que se creara una variable de entorno, que podamos cambiar cuando estemos en producción, y que se actualicen todas automaticamente.
+
+        const res = await fetch (`http://localhost:8000/api/books/${params.bid}`)
+
+
+Para ello vamos a raiz del proyecto y crear un nuevo archivo.
+
+    ·env
+
+Que contendra las variables de entorno, y queda de la sigfuiente manera:
+
+    NEXT_PUBLIC_BACKEND_URL= http://localhost:8000
+
+
+
+Al guardar se detectan automaicamente los cambios
+
+Terminal Webstorm
+    info  - Loaded env from /var/www/html/dev/Books/front-end/.env
+    wait  - compiling...
+    event - compiled client and server successfully in 2.1s (211 modules)
+
+
+
+Y ahora podemos usr esa variable:
+En [bid]/index.js
+
+---
+    export async function getStaticProps ({ params }) {
+    //console.log(params.bid)
+    const res = await fetch (`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/books/${params.bid}`)
+---
+
+La misma variable la vamos utilizar en.
+
+---
+export async function getStaticPaths(){
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/books`)
+---
+
+Por ultimo cambiamos en el indice del listado de libros
+
+libros/index.js
+---
+export async function getStaticProps ({ params }) {
+    //console.log(params.bid)
+    const res = await fetch (`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/books/${params.bid}`)
+
+--
+
+Funcionando sin problema alguno.
+
+Ahora vamos con el componente Book Create
