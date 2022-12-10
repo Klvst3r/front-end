@@ -1,0 +1,167 @@
+13. Vinculacion de dos vias y creando libro sen la Bd a  traves de la API
+
+Ya se tiene la conexion desde un lado, del imput es decir cuando escribimos en el imput se modifica el estado, pero ahora lo que se quiere es que cuando se modifique el estado, tambien se modifique el imput, que es lo que se conoce como twoWayDatawinding o vinculacion de dos vias.
+
+ahora si cambiamos el valor por defecto y actualizamos el contenido del imput no se cambia para que se sincronice en esa via tambien agragamos el value con el bookname , ahora si actualizamos estara el valor
+
+
+---
+  <p>{bookName}</p>
+            <form onSubmit={handleSubmit}>
+                <input
+                    onChange={(e) => setBookName(e.target.value)}
+                    value={bookName}
+                    type="text"
+                />
+---
+ahora se deja el valor vacio por defecto, para que cuando se escriba, le demos click se tenga el valor,
+
+Se quitara 
+
+e.preventDefault()
+        console.log(bookName)
+
+Para hacer un fetch, es decir armar una peticion a la API, para ello vamos volver a ejecutar fetch, con templateStrings directamente para imprimir la variable NEXT_PUBLIC_BACKEND_URL, seguida de Books.
+
+
+La funcion handleSubmit va a ser asincrona, agragando el await y la funcion fetch por defecto utiliza get para obtener datos, pero en este caso queremos enviar datos.
+
+Vamos a enviar lo que el usuario envie en el imput, para ello podemos pasarle como segundo parametro de la funcion fetch, la url, els egundo es un objeto dode podemos indicarle el metodo que sea POST en este caso.
+
+Como vamos a enviar datos, vamos a enviar un body, el cuerpo de la petición, y como no podemos pasar directamente un objeto, debemos utilizar JSON.stringify para codificarlo.
+
+Ahora ya podemos pasarle eltitulo del libro, y ya sabemos que esta dentro de bookName
+
+Para seleccion multiple o edicion multilinea en WebStrom es mediante
+
+CTRL + SHIFT + ALT + CLICK
+
+Para cambiar a bookTitle.
+
+ahora se tiene el getter, el setter, y se esta pasando.        
+
+---
+const BookCreate = () => {
+    const [bookTitle, setBookTitle] = useState('')
+    async function handleSubmit(e){
+        e.preventDefault()
+        /*console.log(bookName)*/
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/books`, {
+            method: 'POST',
+            body: JSON.stringify({
+                title: bookTitle
+            })
+        })
+
+        console.log(res)
+    }
+
+    return (
+        <>
+        <h1>BookCreate</h1>
+            <p>{bookTitle}</p>
+            <form onSubmit={handleSubmit}>
+                <input
+                    onChange={(e) => setBookTitle(e.target.value)}
+                    value={bookTitle}
+                    type="text"
+                />
+                <button>Enviar</button>
+            </form>
+            <br/>
+        <Link href="/libros">Book List</Link>
+        </>
+    );
+};
+----
+
+
+ahora cuando se cambie el imput  se llamara al metodo setBookTitle se setear el valor, se tiene el valor en caso de que este predefinido.
+
+Finalemnte regresamos  el bookTitle a la peticion, con esto ya tendriamos guardada la petición.
+
+
+
+
+Al enviarlo genera un error.
+
+		Unhandled Runtime Error
+		TypeError: Failed to fetch
+
+		Source
+		pages/libros/crear.js (9:26) @ fetch
+
+		   7 | e.preventDefault()
+		   8 | /*console.log(bookName)*/
+		>  9 | const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/books`, {
+		     |                  ^
+		  10 |     method: 'POST',
+		  11 |     body: JSON.stringify({
+		  12 |         title: bookTitle
+
+
+Ya que no se recibio ningun header llamado 'Access-Control-Allow-Origin' esto se soluciona, agregando unos header en la parte suberor del body, enviando el header "acept", indicando que es application/json, y el content type aplication/json. Basicamente le estamos indicando que lo que se esta enviando es en formato JSON, quedando:
+
+
+---
+
+    async function handleSubmit(e){
+        e.preventDefault()
+        /*console.log(bookName)*/
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/books`, {
+            method: 'POST',
+            headers: {
+              accept: {
+                  accept: 'application/json',
+                  'content-type': 'application/json',
+              },
+            },
+            body: JSON.stringify({
+                title: bookTitle
+            })
+        })
+
+        console.log(res)
+    }
+---
+ 
+
+
+ahora en el formulario
+
+	BookCreate
+	----------------
+	| Klvst3r Book |
+	----------------
+
+	Klvst3r Book
+		Enviar
+
+	Book List
+
+
+Y en consola:
+
+	Response {type: 'cors', url: 'http://localhost:8000/api/books', redirected: false, status: 201, ok: true, …}
+	body
+	: 
+	(...)
+	bodyUsed: false
+	headers	: Headers {}	
+	ok:	true
+	redirected	: 	false
+	status	: 	201
+	statusText	: 	"Created"
+	type	: 	"cors"
+	url	: 	"http://localhost:8000/api/books"
+	[[Prototype]]	: 	Response	
+
+Ahora podemos ver la respuesta.
+
+en 
+Headers {}
+	ok	: 	true
+
+Podemos ver que si se pudo ver el libro, tenemos el status created, y si vamos a la lista podemos ver el libro que se acaba de crear.
+
+Ya se esta creando libros en la Bd
