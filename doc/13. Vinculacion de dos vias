@@ -164,4 +164,10 @@ Headers {}
 
 Podemos ver que si se pudo ver el libro, tenemos el status created, y si vamos a la lista podemos ver el libro que se acaba de crear.
 
-Ya se esta creando libros en la Bd
+Ya se esta creando libros en la Bd con la API
+
+
+Ahora.
+
+Si encviamos en balnco el titulo, se observara un error, 422 es decir un error de validación, tenemos que validar el formulario.
+

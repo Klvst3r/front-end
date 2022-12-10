@@ -1,0 +1,278 @@
+14. Validacion de Formulario.
+
+Si encviamos en balnco el titulo, se observara un error, 422 es decir un error de validación, tenemos que validar el formulario.
+
+Quitando
+	console.log(res)
+
+
+Lo que haremos es revisar si las respuestas que son OK, 
+
+
+
+
+Quiere decir que funcionaron o no, en caso contrario hubo algun fallo.
+
+---
+if (res.ok){
+            //success
+        }else {
+            //failure
+        }
+---
+
+Enotnces vamos a implementar el fallo.
+
+Creando otra pieza de datos con useState, almacenamos los errores, y el valor por defecto sera un array vacio, 
+
+	const [errors, setErrors] = useState([]);
+
+envtonces esos errores vamos a imprimirlos de momento 
+---
+	        if (res.ok){
+            //success
+        }else {
+            const data = await res.json()
+            setErrors(data.errors)
+        }
+    }
+
+    return (
+        <>
+        <h1>BookCreate</h1>
+            <p>{JSON.stringify(errors)}</p>
+---            
+
+Si la respuesta no es OK, vamos setera los errores que se reciban desde la respuesta, entonces, se crea la constanta data
+
+	const data = await res.json()
+
+---
+ if (res.ok){
+            //success
+        }else {
+            const data = await res.json()
+            setErrors(data.errors)
+        }
+    }
+
+---
+
+Vamos allamar al metodo _json de la respuesta para que nos de los datos en formato json.
+
+Dentro del data se tendra una llave error que es la que sera utilizada.
+
+Se comrpeuba funcionamiento del navegador.
+
+	http://localhost:3000/libros/crear
+
+		Se envia un formulario vacio
+
+		Y la respuesta es.
+
+			BookCreate
+					{"title":["El campo title es obligatorio"]}
+
+			Enviar
+
+			Book List
+
+
+
+Podemos ver los eerores de validación desde la API, es decir que vamos a dejar el el usuario envie lo que quiera, no se va a hacer la validación de momento, desde el front end. L
+
+La validación se hara en desde la API, culquier error que contenga lo vamos a almacenar en la pieza de errores.
+
+	
+		setErrors(data.errors)
+
+Debajo vamos a mostrar estos errores, puede ser debajo del boton.
+
+Se imprime la variable error
+
+  ---
+
+  <>
+        <h1>BookCreate</h1>
+            <p>{JSON.stringify(errors)}</p>
+            <form onSubmit={handleSubmit}>
+                <input
+                    onChange={(e) => setBookTitle(e.target.value)}
+                    value={bookTitle}
+                    type="text"
+                />
+                <button>Enviar</button>
+                {errors.title && <span>{errors.title}</span>}
+            </form>
+            <br/>
+        <Link href="/libros">Book List</Link>
+        </>
+  ---		
+	
+ahora si enviamos un campo vacio veremos la respuesta en el navegador.
+
+		BookCreate
+			{"title":["El campo title es obligatorio"]}
+
+			Enviar	El campo title es obligatorio
+
+		Book List	
+
+La sintaxis del error
+
+		{errors.title && <span>{errors.title}</span>}
+
+Lo que sucede es que se evalua lo que se tenga a la izquierda, y si esto se evalua como verdadero, se va a imprimir lo de la derecha, en caso contrario no se va a imprimir nada.
+
+Se encierra para agregar una siguiente linea con estilos en linea con React
+
+	<span style={{color: 'red', display: 'block'}}>{errors.title}</span>
+
+	Ahora ya se puede quirar el error de displiege de JSON
+		<p>{JSON.stringify(errors)}</p>		
+
+Ahora en el navegador si enviamos vacio tendremos:
+
+	BookCreate
+		---------
+		|		 |	Enviar
+		---------
+		El campo title es obligatorio
+
+	Book List		
+
+Ahora podemos ver el error.
+
+Entonces vamos ahora con el happypath o camino feliz, es decir si la respue4sta es Ok, si , si se creo el libro, vamos a setear los errores a un array vacio nuevamente.
+
+Para que desaparezcan los errores.
+
+Luego vamos a setear el BookTitle a un string vacio tambien y finalmente vamos a usarl el router llamando al metodo push, y vamos a redirecionarlos a 
+/libros
+
+---
+	if (res.ok){
+            //success
+            setErrors([])
+            setBookTitle('')
+            return router.push('/libros')
+
+
+        }else {
+--
+
+El router no se tiene asi que se debe importar
+
+const BookCreate = () => {
+    const router = useRouter()
+
+Importandose en la parte superior.
+
+---
+	import {useRouter} from "next/router";
+
+	const BookCreate = () => {
+	    const router = useRouter()
+---            
+
+Se crea otro libro el libro 6 y ahora vamos a enviar, efectivamente se puede ver almacenado y visualilzado.
+
+	Libros
+		Libro 1
+		Libro 2 - Updated
+		Book 3
+		Klvst3r Book
+		Libro 5 desde el Formulario
+	Create Book
+
+
+
+En la parte inferior como se esta retornando el router.push 
+quiere decir que despues de ello ya nada se va a ejecutar por lo que podemos quitar el codigo que sigue, simplificando el codigo un poco.
+
+---
+	    async function handleSubmit(e){
+	        e.preventDefault()
+	        /*console.log(bookName)*/
+	        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/books`, {
+	            method: 'POST',
+	            headers: {
+	              accept: 'application/json',
+	              'content-type': 'application/json',
+	            },
+	            body: JSON.stringify({
+	                title: bookTitle
+	            })
+	        })
+
+	        //console.log(res)
+	        if (res.ok){
+	            //success
+	            setErrors([])
+	            setBookTitle('')
+	            return router.push('/libros')
+	        }
+	        const data = await res.json()
+	        setErrors(data.errors)
+
+	        
+    }
+---
+
+ahora, algo que se suele pasar	por alto es el manejo de las conexiones lentas, por ejemplo si abrimos la consola, y se habilita la vista de movil se agrega la opcion para agregar un troutling, y se agrega una opcion de conexion lenta en movil.
+
+Se intenta nuevamente una inserción, no hay nada que indique que se estan insertando varia veces.
+
+Pudiendo visualizr todos los que se enviaron.
+
+Para evitar esto, vamos a agragar otra pieza de estado 
+
+ 	const [submitting, setSubmitting] = useState(false);
+
+Enviando con el valor inicial falso, entonces, cuando se ejecute el metodo, handlesubmit el estado se modificara a verdadero y al final cuando se termine el anvio vamos  a cambiarlo a falso nuevamente.
+
+---
+...
+    async function handleSubmit(e){
+        e.preventDefault()
+        setSubmitting(true)
+...
+  setSubmitting(false)
+  ...        
+---
+
+con esta variable podemos ir al imput y agregar la propiedad disabled igual a sumbitting es decir si se esta enviando, el imput se va a deshabilitar.
+
+---
+ <input
+                    onChange={(e) => setBookTitle(e.target.value)}
+                    value={bookTitle}
+                    disabled:{submitting}
+                    type="text"
+                />
+---
+
+Lo mismo con el boton
+
+---
+<form onSubmit={handleSubmit}>
+                <input
+                    onChange={(e) => setBookTitle(e.target.value)}
+                    value={bookTitle}
+                    disabled:{submitting}
+                    type="text"
+                />
+                <button
+                    disabled={submitting}
+                >{submitting ? 'Enviando...' : 'Enviar'}</button>
+                {errors.title && (
+                    <span style={{color: 'red', display: 'block'}}>{errors.title}</span>
+                )}
+            </form>
+
+--
+
+Se prueba desde el naveghador y podemos ver que que esta funcionando y no hay forma de seguir enviando con conexiones lentas desde el movil, de esta forma evitamos que se envien vairas veces el mosmo formuilario, en conexiones lentas.
+
+Vamos ahora con el formulario para editar.
+
