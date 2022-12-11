@@ -1,0 +1,218 @@
+15. Formulario de Edicion de Libros
+
+Como el formulario de editar va a ser muy similar al de crear se copiara todo el contenido del componente crear y se pegar en el componente editar.
+
+
+
+
+Lo primero que se cambiara es el nombre de la constante del componente sera edit, y se visualiza en el navegador.
+
+Ahora si se va a la ruta 1 editar.
+	
+	http://localhost:3000/libros/1/editar
+
+El titulo sera Book edit
+
+Com ose va a necesitar el libro para poderlo editar, se utilizara una funcion especial de Next.Js 
+
+	export async function getServersideProps({params})
+
+Tambien se ejecuta del lado del servidor pero no solo se ejecuta al momento del Bild sino en cada petición. 
+
+Creando esta funcion asincrona, Next JS se va a encargar de ejecutarla y se va a hacer otro fetch en la misma URL 
+	const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/books/${params.bid}` )
+
+Se agrega la constante con 
+	const data = await.res.json()
+
+Finalmente retornamos las propiedades con la llave book = data.
+
+
+---
+import Link from "next/link";
+import {useState} from "react";
+import {useRouter} from "next/router";
+
+export async function getServerSideProps({params}){
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/books/${params.bid}` )
+    const data = await res.json()
+
+    return {
+        props: {
+            book: data
+        }
+    }
+}
+
+const BookEdit = ({book}) => {
+    const router = useRouter()
+    const [bookTitle, setBookTitle] = useState(book.title)
+    const [errors, setErrors] = useState([]);
+    const [submitting, setSubmitting] = useState(false);
+    async function handleSubmit(e){
+        e.preventDefault()
+        setSubmitting(true)
+
+        /*console.log(bookName)*/
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/books`, {
+            method: 'POST',
+            headers: {
+                accept: 'application/json',
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+                title: bookTitle
+            })
+        })
+
+        //console.log(res)
+        if (res.ok){
+            //success
+            setErrors([])
+            setBookTitle('')
+            return router.push('/libros')
+        }
+        const data = await res.json()
+        setErrors(data.errors)
+        setSubmitting(false)
+
+    }
+
+    return (
+        <>
+            <h1>Book Edit</h1>
+
+            <form onSubmit={handleSubmit}>
+                <input
+                    onChange={(e) => setBookTitle(e.target.value)}
+                    value={bookTitle}
+                    disabled={submitting}
+                    type="tex t"
+                />
+                <button
+                    disabled={submitting}
+                >{submitting ? 'Enviando...' : 'Enviar'}</button>
+                {errors.title && (
+                    <span style={{color: 'red', display: 'block'}}>{errors.title}</span>
+                )}
+            </form>
+            <br/>
+            <Link href="/libros">Book List</Link>
+        </>
+    );
+};
+
+export default BookEdit;
+---	
+
+El book se recibe ene el componente y debajo se va seterar un valor por defecto donde bookTitle va a ser igual al titulo del book que recibimos que es el que se acaba de consultar en la BD lluesgo se tienen los errores y la variable para verificar si se esta enviando o no.
+
+Se actualiza el navegador.
+
+Ahora podemos ver el formulario con el dato de la bd en el compo de texto recuperado para editarlo
+
+	Book Edit
+		----------------
+		| Libro 1      |	Enviar
+		----------------
+	Book List
+
+
+Ahora el campo ya viene lleno con el valor del titulo con el libro que queremos editar, si vamos al libro 3 lo veremos tambien.
+
+Entonces, 
+
+Vamos ahora a modificar el metodo, submit
+
+	const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/books/${bid}`, {
+
+ 
+ en lugar de books vamos a agregar book. y el id del libro que estamos editando luego necesitamos pasarle la configuración, y en el metodo post siempre se debe dejar en post siempre, ya que como se vio en la leccion anterior, el metodo patch y delete, funcionan diferente, ya que no son verbos soportados nativamente asi que debemos utilizar otra forma de avisarles a Laravel cual es el metodo que queremos ejecutar. en este caso el metodo por defecto va a ser post que es un metodo nativo, pero debajo en el cuerpo vamos a pasarle una llave ocultapor asi decirlo llamda "method" y que sea igual a patch en este caso.
+		 const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/books/${bid}`, {
+		            method: 'POST',
+		            headers: {
+		                accept: 'application/json',
+		                'content-type': 'application/json',
+		            },
+
+
+
+ Laravel automaticamente se va a dar cuenta que tenemos un campo _method con valor PATCH y nos va a a redireccionar a la ruta correcta a la Ruta Patch.
+
+ 		body: JSON.stringify({
+                title: bookTitle,
+                _method: 'PATCH'
+            })
+
+ Esto es muy importante en esta parte cuando esta Ok limpiamos los errores, y regresamos al push.
+
+
+ ---
+ 	if (res.ok){
+            //success
+            setErrors([])
+            setBookTitle('')
+            return router.push('/libros')
+        }
+        const data = await res.json()
+        setErrors(data.errors)
+        setSubmitting(false)
+ ---
+
+ Se queda como esta y debajo que el tipo no es asignable al tipo string y esto es por que debe ser un String trambien, asi que se va a encerrar en un String
+
+ 		value={String(bookTitle)}
+
+ Se tiene el valor de tipo texto y lo demas se queda como esta.
+
+
+ Se actualiza, y si se edita, y envia se puede ver que funciona.
+
+
+
+Existe un apregunta para el foro:
+
+Se tiene un registro de datos en la bd donde no se cuenta por ejemplo con el ID 3
+
+
+
+es decir se tiene 
+
+
+
+Al ir a http://localhost:3000/libros/3/editar
+
+De manera intencional vemos que no existe el Id 3
+
+Se genera el siguiente error.
+
+
+Libros
+1-Libro 1
+2-Libro 2 - Updated
+4-Book 3 - Edited
+5-Klvst3r Book
+6-Libro 5 desde el Formulario
+7-Libro desde version movil
+Create Book
+
+
+
+Server Error
+FetchError: invalid json response body at http://localhost:8000/api/books/3 reason: Unexpected token < in JSON at position 0
+
+This error happened while generating the page. Any console logs will be displayed in the terminal window.
+Source
+pages/libros/[bid]/editar.js (8:17) @ async getServerSideProps
+
+   6 | 
+   7 | const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/books/${params.bid}`)
+>  8 | const data = await res.json()
+     |             ^
+   9 | 
+  10 | //console.log(data)
+  11 | 
+Show collapsed frames
+
+Como puedo validar cuando no exista un id de la BD y se escriba de manera intencional ese Id especifico para su edición.
+
