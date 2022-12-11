@@ -24,6 +24,12 @@ const BookList = ( { books } ) => {
                         <Link href={`/libros/${book.id}`}>
                             {book.id +'-'+ book.title}
                         </Link>
+
+                        { ' - ' }
+
+                        <Link href={`/libros/${book.id}/editar`}>
+                            Editar
+                        </Link>
                     </li>
                 ))}
             </ul>

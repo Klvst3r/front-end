@@ -216,3 +216,33 @@ Show collapsed frames
 
 Como puedo validar cuando no exista un id de la BD y se escriba de manera intencional ese Id especifico para su edición.
 
+Ahora se complementara el ejericio con un link al final para poder editar cada uno de los registros
+
+Ahora dese la vista o al componente index
+
+/libros/index.js
+
+
+---
+<ul>
+                {books.map(book => (
+                    <li key = {`book-${+book.id}`}>
+                        <Link href={`/libros/${book.id}`}>
+                            {book.id +'-'+ book.title}
+                        </Link>
+
+                        { ' - ' }
+
+                        <Link href={`/libros/${book.id}/editar`}>
+                            Editar
+                        </Link>
+                    </li>
+                ))}
+            </ul>
+
+---
+
+Creando un link para la edición, se revisa en el navegador y se comprueba que funciona.
+
+
+Ya se tiene con esto toda la parte de editar, vamoa ahora a crear un boton para eliminar un libro
