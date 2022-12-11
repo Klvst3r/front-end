@@ -15,6 +15,25 @@ export async function getStaticProps () {
     }
 }
 const BookList = ( { books } ) => {
+
+    async function handleDelete(e, bookId){
+        e.preventDefault()
+
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/books/${bookId}`, {
+            method: 'POST',
+            headers: {
+                accept: 'application/json',
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+                _method: 'DELETE'
+            })
+        })
+
+        if(res.ok){
+            window.location.href = '/libros'
+        }
+    }
     return (
         <div>
             <h1>Libros</h1>
@@ -30,6 +49,15 @@ const BookList = ( { books } ) => {
                         <Link href={`/libros/${book.id}/editar`}>
                             Editar
                         </Link>
+
+                        { ' - ' }
+                        <form
+                            onSubmit={(e) => handleDelete(e, book.id)}
+                            style={{ display: 'inline'}}
+                        >
+                            <button>Eliminar</button>
+                        </form>
+
                     </li>
                 ))}
             </ul>

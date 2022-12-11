@@ -1,0 +1,165 @@
+16. Eliminar un libro
+
+
+En el mismo componente 
+/libros/index.js
+
+En la sección del enlace para la edición de un libro se cra un espacio y podemos crear un boton que llame a una fuincion o tambien se puede crear un formulario.
+
+
+Para ello indicamos que escuche el evento submit, y cuando se envie llame al metodo handleDelete.
+
+
+---
+const BookList = ( { books } ) => {
+
+    function handleDelete(){
+
+    }
+    return (
+        <div>
+            <h1>Libros</h1>
+            <ul>
+                {books.map(book => (
+                    <li key = {`book-${+book.id}`}>
+                        <Link href={`/libros/${book.id}`}>
+                            {book.id +'-'+ book.title}
+                        </Link>
+
+                        { ' - ' }
+
+                        <Link href={`/libros/${book.id}/editar`}>
+                            Editar
+                        </Link>
+
+                        { ' - ' }
+                        <form onSubmit={handleDelete}
+                        style={{ display: 'inline'}}
+                        >
+                            <button>Eliminar</button>
+                        </form>
+
+                    </li>
+                ))}
+            </ul>
+            <Link href="/libros/crear">Create Book</Link>
+        </div>
+    );
+};
+
+---
+
+
+Ahora funciona en el navegador.
+
+
+
+Dentro de la funciont hanldeDelete se sabe que se recibe el evento y vamos a prevendeafult para evitar que realize la accion predeterminada es decir que se refresque la pagina cuando enviemos el formulario.
+
+ahora se copiara lo que se tiene del componente editar.
+
+Todo esto de aca.
+
+
+
+---
+	const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/books/${book.id}`, {
+            method: 'POST',
+            headers: {
+                accept: 'application/json',
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+                title: bookTitle,
+                _method: 'PATCH'
+            })
+        })
+---
+
+
+Quedando el componente
+
+/libros/index.js
+
+---
+
+const BookList = ( { books } ) => {
+
+    function handleDelete(e){
+        e.preventDefault()
+
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/books/${book.id}`, {
+            method: 'POST',
+            headers: {
+                accept: 'application/json',
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+                title: bookTitle,
+                _method: 'PATCH'
+            })
+        })
+    }
+---
+
+Se agrega el keywork async a esta funcion ya que internamente dentor de esta funcion se esta utilizando await
+
+en el caso especifico no se tiene la variable book.id, 
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/books/${book.id}`, {
+
+El metodo POST, siempre debe de ir, paa indicarle un delete se debe cambiar.
+
+    body: JSON.stringify({
+                _method: 'DELETE'
+            })
+
+el titulo se pude quitar.
+
+Si la respuesta es exitosa, se refresca la pagina,con:
+
+    if(res.ok){
+            window.location.href = '/libros'
+        }
+
+Para refresacar la pagina y el libro desaparecera.
+
+Ahora podemos cambiar el Id del libro 
+
+Recibiendo el BookId como parametro del handleDelete como segundo parametro,
+---
+        async function handleDelete(e, bookId){
+        e.preventDefault()
+
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/books/${bookId}`, {
+---
+
+
+ y para pasarselo, en lugar de llamarlo directamente al metodo o al a funcion handlesubmit llamaremos a una funcion anonima, recibiendo el evento, y por aca pasamos el evento y el bookId. 
+
+---
+        <form
+            onSubmit={(e) => handleDelete(e, book.id)}
+            style={{ display: 'inline'}}
+        >
+---
+
+
+ el book.id se tiene gracias a que estamos haciendo un foreach
+
+    {books.map(book => (
+
+Ahora vamos al navegador y vemos si funciona, todos funcionan. si se verifica en la Bd, podremos corroborar que desararece el registro.
+
+si eliminamos desde la Bd directamente, podremos comrpobar en la aplicación que desaparece tambien y actualiza en tiempo real.
+
+todo esta funcionando bien..
+
+ahora ya se tiene al cliente, ya podemos acceder a la raiz, 
+
+Podemos ir al listado de libros, podemos editarlo cambiando el titulo, o eliminando un libro.
+
+Se pude crear un nuevo libro, y revisarlo en el listado..
+
+
+
+
