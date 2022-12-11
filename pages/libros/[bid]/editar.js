@@ -61,11 +61,16 @@ const BookEdit = ({ book }) => {
                     onChange={(e) => setBookTitle(e.target.value)}
                     value={String(bookTitle)}
                     disabled={submitting}
-                    type="tex t"
+                    type="text"
+                    data-cy="input-book-title"
                 />
                 <button
                     disabled={submitting}
-                >{submitting ? 'Enviando...' : 'Enviar'}</button>
+                    data-cy="button-submit-book"
+                >
+                    {submitting ? 'Enviando...' : 'Enviar'}
+                </button>
+
                 {errors.title && (
                     <span style={{color: 'red', display: 'block'}}>{errors.title}</span>
                 )}

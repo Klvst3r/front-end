@@ -1,0 +1,339 @@
+17. Pruebas
+
+Es necesario escribir test por que no queremos hacer estas pruebas manuales, a cada momento, y hacer click para ver libros, editar mediate un formulario, eliminar, no se requiere hacer todas estas cosas manualmente cada vez que se tenga un error o cada vez que se requiera estar seguros que la aplicación funciona como se quiere que funcione.
+
+Para ello vamos a agregar una pequeña suit de test utilizando cypress
+
+
+entonces desde la terminal del editor, abirmos un anueva pestaña para instalar cypres con las dependencias de desarrollo
+
+con npm install cypress -D
+
+npm install cypress -D
+
+added 164 packages, and audited 183 packages in 37s
+
+30 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+
+
+Limpiamos
+	clear
+
+Para abrir cypress
+	npx cypress open
+		It looks like this is your first time using Cypress: 12.0.2
+
+		✔  Verified Cypress! /home/klvst3r/.cache/Cypress/12.0.2/Cypress
+
+		Opening Cypress...
+
+
+En la ventana se tienen dos opciones 
+- Una para Component Testing para testing de componentes en fase beta.
+
+- E2E Testing, que es el que se va a utilizar.
+
+ahora se va a generar los archivos de configuración:
+
+
+	Configuration files
+	We added the following files to your project:
+
+	cypress.config.js
+	The Cypress config file for E2E testing
+	
+	cypress/support/e2e.js
+	The support file that is bundled and loaded before each E2E spec.
+	
+	cypress/support/commands.js
+	A support file that is useful for creating custom cypress commands and overwritting existing ones.
+
+	cypress/fixtures/example.json
+	Added an example fixtures file/folder.
+
+
+Todo esto se necesita para que funciones Cypress. continuar. 
+
+ahora vamos a elegir el navegador.
+
+Chorme/electron/Firefox
+
+Elegimos Chrome
+
+Damos Click y ahi tenemos el entorno.
+
+Ahora podemos hacer click en "Scaffold example specs"
+
+Para generar unos test de ejemplo y los podamos revisar esto es muy util como referecncia para poder ir revisando las cosas que se pueden hacer con cypress.
+
+Pero ahora simplemnte vamoa a hacer un nuevo test vacio "Create new empty spec"
+
+ahora no indica la ubicación donde se va a guardar.
+
+		cypress/e2e/spec.cy.js
+
+
+Vamos a cambiar el nombre books
+
+	cypress/e2e/books.cy.js
+
+Enter
+
+
+
+Great! The spec was successfully added
+
+--------------------------------------
+cypress/e2e/books.cy.js
+describe('empty spec', () => {
+  it('passes', () => {
+    cy.visit('https://example.cypress.io')
+  })
+})
+
+--------------------------------------
+
+Okay, run the spec | Create another spec	
+
+Este sera el contenido del archivo.
+
+Ok y ejecutamos el spec, y aho vemos la ejecuación.
+
+Lo unico que hace este test es visitar la url llmada 
+
+	visithttps://example.cypress.io
+
+
+No queremos esto asi que minimizamos y para quedar abierto en el servidor de Next.Js como el servidor de Cypress y ahora tenemos nuestro test dentro de la carpeta del proyecto.
+
+
+abrimos el archivo
+
+/front-end/cypress/e2e/books.cy.js
+
+---
+
+describe('empty spec', () => {
+  it('passes', () => {
+    cy.visit('https://example.cypress.io')
+  })
+})
+---
+
+
+Cambiamos el titulo describiendo a los ibros y decimos que se puede listar ver, listar, crear, editar y eliminar libros. 
+
+---
+	describe('Books', () => {
+	  it('can list, show, create, edit and delete books', () => {
+	    cy.visit('http://localhost:3000')
+	  })
+	})
+
+---
+
+Guardamos y vemos que se ejecuta el test y ahi tenemos nuestra aplicación.
+
+antes de continuar no queremos estar escribiendo el dominio
+
+	
+    http://localhost:3000'
+
+Cada vez que vayamos a utiliza el vistit para vistar una url aunque no se va a utilizar tanto.
+
+Se vera una forma de extraer este dominio base.
+
+
+en el archivo de configuración de Cypress en raiz dentro de e2e agregamos :
+
+	cypress.config.js
+
+		const { defineConfig } = require("cypress");
+
+		module.exports = defineConfig({
+		  e2e: {
+		    setupNodeEvents(on, config) {
+		      // implement node event listeners here
+		    },
+		  },
+		});
+
+
+Dentro de e2e agregamos:
+
+---
+	const { defineConfig } = require("cypress");
+
+	module.exports = defineConfig({
+	  e2e: {
+	    baseUrl: 'http://localhost:3000',
+	    setupNodeEvents(on, config) {
+	      // implement node event listeners here
+	    },
+	  },
+	});
+
+
+---	
+
+Ahora en : cypress.cy.js
+
+---
+	describe('Books', () => {
+	  it('can list, show, create, edit and delete books', () => {
+	    cy.visit('/')
+	  })
+	})
+
+---
+
+Lo primero es verificar el listado de libros
+
+para ello visitamos la raiz y hacemos click al elemento.
+
+En cypress en raiz hacemoc click sobre el icono de crucecita en circulo y seleccionamos el elemento en este caso "Book List" y en la barra de valores, podemos ver la forma en la que obtenemos ese elemento 
+
+	cy.get('a')
+
+Se pega en el codigo de pruebas de cyprss.
+
+---
+
+	describe('Books', () => {
+	  it('can list, show, create, edit and delete books', () => {
+	    cy.visit('/')
+	    cy.get('a').click()
+	  })
+	})
+---	
+
+
+Luego que tenemos al lemento podemos llamar al metodo click para que se le de click.
+
+Guardamos y regresamos a Cypress en Chorme y todo funcionara muy rapido. 
+
+Pero se visito la pagina de inciio  click al link y ahora estaos en el listado de libros 
+
+
+En la seccion de trabajo de Cypress:
+
+	Books
+can list, show, create, edit and delete bookspassed
+TEST BODY 
+visit/ 
+get a 
+. click
+(fetch)GET 200 /_next/static/development/_devMiddlewareManifest.json
+(fetch)GET 200 /_next/static/development/_devPagesManifest.json
+(fetch)GET 200 /_next/data/development/libros.json
+(new url)http://localhost:3000/libros
+
+
+
+Se visito la pgina de inicio, se dio click al link y ahora estamos en el listado de libros 
+
+
+Es probable que exiatsn mas de un link en la lmisma pagina y no es recomendable utilizar este tipo de selectores. 
+
+Aunque es probable que se puedan utilizar otro tipo de selectores.
+
+En este caso podriamos utilizar la url directamente o podemos utilizar unos atributos de HTML, los atributos data y vamos a ver el primero.
+
+En el index.js
+
+a este link que es al que le queremos dar click vmos a agregarle un data
+
+---
+	 <Link
+          href="/libros"
+          data-cy="link-to-books "
+      >
+          Book List</Link>
+--- 
+
+
+Se copia 
+
+	data-cy="link-to-books "
+
+y para seleccionarlo.
+
+dentro del archivo:
+
+books.cy.js
+
+	agregamos a.
+
+		 cy.get('[data-cy="link-to-books "]').click()
+
+
+Pagando dentro los atributos.
+
+Podemos aliminar las comillas funcionando de la misma forma.
+
+	cy.get('[data-cy=link-to-books]').click()
+
+
+solo que ahora estamos siendo más especificos, y en caso de que existan más links se va a seleccioanr unicamente el elemento 	
+
+El codigo de la prueba se puede simplificar encadenando los metodos.
+
+	cy.visit('/').get('[data-cy=link-to-books]').click()		 
+
+Lo siguiente que se va a verificar es que se puede crear libros
+
+En el listado de libros seleccionamos el elemento "create Books"	  para ver el parametro por el cual se puede realizar.
+
+	cy.get('[href="/libros/crear"]')
+
+Ahora este codigo lo utilizamos pegandolo y se hara click
+	cy.get('[href="/libros/crear"]').click()
+
+Ahora vamos a escribir en el imput 
+
+	Seleccionandolo y vemos la forma de como se puede obtner.
+
+		     //Create Books
+		    cy.get('[href="/libros/crear"]').click()
+		      .get('input').type('New Book from Cypress')
+
+Ahora se tiene el mismo problema que cuando se seleccioano el link un formulario probablemenmte tiene muchos mas campos de entrada asi que vamos a hacer especificos con un data atributo
+
+	//Create Books
+    cy.get('[href="/libros/crear"]').click()
+      .get('[data-cy=input-book-title]]')
+        .type('New Book from Cypress')
+
+
+al no encontra abrimos el componente crear.js
+
+<input
+                    onChange={(e) => setBookTitle(e.target.value)}
+                    value={bookTitle}
+                    disabled={submitting}
+                    type="tex t"
+                    data-cy="input-book-title"
+                />
+Actualizamos los test y vemos  sui se escribe dentro del campo.
+
+ahora al boton submit vamos a ordenar un poco y se agrega un data, y que diga submitBook por ejemplo.
+
+
+ 	data-cy="button-submit-book"
+
+Quedando:
+	button
+                    disabled={submitting}
+                    data-cy="button-submit-book"
+                >
+
+Selecionamos la linea agragada y lo llevamos a boos.cy.js
+
+	          
+
+
+
