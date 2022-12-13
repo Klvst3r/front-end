@@ -320,7 +320,22 @@ al no encontra abrimos el componente crear.js
                 />
 Actualizamos los test y vemos  sui se escribe dentro del campo.
 
-ahora al boton submit vamos a ordenar un poco y se agrega un data, y que diga submitBook por ejemplo.
+
+Respuesta desde Cypress:
+
+	Libros
+1-Libro 1 - Editar - Eliminar
+2-Libro 2 - Updated - Editar - Eliminar
+4-Book 3 - Edited again - Editar - Eliminar
+5-Klvst3r Book - Editar - Eliminar
+6-Libro 5 desde el Formulario - Editar - Eliminar
+7-Libro desde version movil - Editar - Eliminar
+9-New Book from Cypress - Editar - Eliminar
+Create Book
+
+
+
+Ahora al boton submit vamos a ordenar un poco y se agrega un data, y que diga submitBook por ejemplo.
 
 
  	data-cy="button-submit-book"
@@ -333,7 +348,47 @@ Quedando:
 
 Selecionamos la linea agragada y lo llevamos a boos.cy.js
 
-	          
+	//Create Books
+    cy.get('[href="/libros/crear"]').click()
+      .get('[data-cy=input-book-title]')
+      .type('New Book from Cypress')
+        .get('[data-cy=input-book-title]')
+        .click()
+  })
+
+Si revisamos se debe haber creado el libro.
+
+
+Cabe recalcar que aca se esta utiliando la Bd de local, hay formas de cmabiar la Base de datos pero es un poco mas complejo de lo que parece, simplemente vamos a utilizr la BD en lcoal de tal forma que alf inal de cada vez que se ejecute este test, La Bd quede extatamente igual de como estaba antes.
+
+Tiene sus ventajas y desventajas.
+
+Por simplicidad se hara asi.
+
+Para verificar que existe este nuevo libro vamos a ir al index, y vamos a agregarle un identificador un 
+
+libros/index.js
+
+agregando un data:
+
+	 <ul data-cy="book-list">
+
+Para obtenerlo,
+
+Onbtenemos este ddata y lo agragamos al codigo de pureba de Cypress.
+
+		.get('[data-cy="book-list"]')
+y le preguntamos si contiene este texto:
+
+	New Book from Cypress
+
+quedando:
+	 .contains('New Book from Cypress')
+
+ahora vamos a verificar tambien 	 	
+	 
+
+
 
 
 

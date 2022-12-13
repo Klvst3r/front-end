@@ -1,0 +1,29 @@
+3.3. Solución al Probelama con Node 18
+
+
+Hola, yo logré solucionar el problema del fetch en Node 18 instalando el módulo "node-fetch".
+
+npm install node-fetch
+
+Nota: En el caso de que de algún error al instalar el módulo, ejecutar los siguientes comandos:
+
+npm install -g npm
+npm cache clean
+npm update
+
+Luego importando el módulo en el archivo js:
+
+import fetch from "node-fetch"
+
+export async function getStaticProps()
+{
+    const res = await fetch('http://127.0.0.1:8000/api/books');
+    const data = await res.json()
+    console.log(data)
+
+    return{
+        props: {
+            books: data
+        }
+    }
+}
